@@ -20,11 +20,12 @@
  1. В каталоге, в котором находится `search/BinarySearch.class` выполните команду
 
     ```
-       java -jar <путь к BinarySearch.jar>
+       java -jar <путь к BinarySearchTest.jar>
     ```
 
-    Например, если `BinarySearch.jar` находится в текущем каталоге, выполните команду
+    Например, если `BinarySearchTest.jar` находится в текущем каталоге, 
+    а `BinarySearch.class` в каталоге `search`, выполните команду
 
     ```
-        java -jar BinarySearch.jar
+        java -jar BinarySearchTest.jar
     ```

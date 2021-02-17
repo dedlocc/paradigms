@@ -26,6 +26,13 @@
     * Класс должен иметь имя `BinarySearchMissing`
     * [Исходный код тестов](java/search/BinarySearchMissingTest.java)
     * [Откомпилированные тесты](artifacts/search/BinarySearchMissingTest.jar)
+ * *Min* (34-35)
+    * На вход подается циклический сдвиг 
+      отсортированного (строго) по возрастанию массива.
+      Требуется найти в нем минимальное значение.
+    * Класс должен иметь имя `BinarySearchMin`
+    * [Исходный код тестов](java/search/BinarySearchMinTest.java)
+    * [Откомпилированные тесты](artifacts/search/BinarySearchMinTest.jar)
 
 
 Для того, чтобы протестировать базовую модификацию домашнего задания:

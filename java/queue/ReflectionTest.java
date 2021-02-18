@@ -2,13 +2,16 @@ package queue;
 
 import base.Asserts;
 
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -20,6 +23,8 @@ import java.util.stream.Stream;
 public class ReflectionTest extends Asserts {
     private static final boolean DEBUG = false;
     public static final Collector<CharSequence, ?, String> JOINER = Collectors.joining(", ", "(", ")");
+
+    protected final Set<Method> methods = new HashSet<>();
 
     public ReflectionTest() {
         Asserts.checkAssert(getClass());
@@ -35,6 +40,7 @@ public class ReflectionTest extends Asserts {
             if (DEBUG) {
                 System.err.println("\t\t" + call);
             }
+            methods.add(method);
             final Object expected;
             final Object actual;
             try {
@@ -148,6 +154,7 @@ public class ReflectionTest extends Asserts {
 
             this.type = type;
             methods = Stream.of(type.getMethods())
+                    .filter(method -> !method.isAnnotationPresent(Ignore.class))
                     .collect(Collectors.toMap(Function.identity(), method -> mode.lookupMethod(implementation, method)));
         }
 
@@ -169,14 +176,24 @@ public class ReflectionTest extends Asserts {
                 final Object result;
                 try {
                     result = methods.get(method).invoke(instance, args);
-                } catch (InvocationTargetException e) {
+                } catch (final InvocationTargetException e) {
                     throw e.getCause();
                 }
-                if (type.isAssignableFrom(method.getReturnType())) {
+                if (method.isAnnotationPresent(Wrap.class)) {
                     return wrap(result);
                 }
                 return result;
             });
         }
     }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    @Inherited
+    protected @interface Ignore {}
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    @Inherited
+    protected @interface Wrap {}
 }

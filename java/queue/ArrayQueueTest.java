@@ -3,7 +3,6 @@ package queue;
 import base.TestCounter;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -11,11 +10,8 @@ import java.util.stream.Stream;
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-public class ArrayQueueTest<T extends ArrayQueueTest.Queue> extends ReflectionTest {
-    private static final int OPERATIONS = 100_000;
-
-    private final Class<T> type;
-    private final TestCounter counter = new TestCounter();
+public class ArrayQueueTest<T extends ArrayQueueTest.Model> extends ReflectionTest {
+    private static final int OPERATIONS = 50_000;
 
     private static final Object[] ELEMENTS = new Object[]{
             "Hello",
@@ -27,44 +23,50 @@ public class ArrayQueueTest<T extends ArrayQueueTest.Queue> extends ReflectionTe
             Map.of()
     };
 
-    protected final Random random = new Random(2474258720358724587L);
-    private final Supplier<T> reference;
+    private final Class<T> model;
+    private final Tester<T> tester;
+    private final TestCounter counter = new TestCounter();
+    protected final Random random = new Random(2474258720358724193L);
 
-    protected ArrayQueueTest(final Class<T> type, final Function<Stream<Object>, T> reference) {
-        this.type = type;
-        this.reference = () -> reference.apply(Stream.of());
+    protected ArrayQueueTest(final Class<T> model, final Tester<T> tester) {
+        this.model = model;
+        this.tester = tester;
+    }
+
+    public static <M extends Model, T extends Tester<M>> void testArrayQueue(final Class<M> type, final T tester) {
+        new ArrayQueueTest<>(type, tester).test();
     }
 
     public static void main(final String[] args) {
-        new ArrayQueueTest<>(Queue.class, ReferenceQueue::new).test();
+        ArrayQueueTest.testArrayQueue(Model.class, d -> () -> d);
     }
 
     protected void test() {
-        test("ArrayQueue", 2, Mode.values());
+        test("ArrayQueue", Mode.values());
     }
 
-    protected void test(final String className, final int step, final Mode... modes) {
+    protected void test(final String className, final Mode... modes) {
         for (final Mode mode : modes) {
-            System.err.printf("Running %s for %s in %s mode%n", getClass().getName(), className, mode);
-            test(className, mode, step);
+            System.err.printf("Running %s for %s in %s mode%n", model.getEnclosingClass().getSimpleName(), className, mode);
+            test(className, mode);
         }
         counter.printStatus(getClass());
     }
 
-    private void test(final String className, final Mode mode, final int step) {
+    private void test(final String className, final Mode mode) {
         final Supplier<T> factory = factory(className, mode);
         testEmpty(factory.get());
         testSingleton(factory.get());
         testClear(factory.get());
-        for (int i = 0; i <= 10; i += step) {
+        for (int i = 0; i <= 10; i += 2) {
             testRandom(factory.get(), (double) i / 10);
         }
     }
 
     protected Supplier<T> factory(final String name, final Mode mode) {
-        final ProxyFactory<T> factory = new ProxyFactory<>(type, mode, "queue." + name);
+        final ProxyFactory<T> factory = new ProxyFactory<>(model, mode, "queue." + name);
         checkImplementation(factory.implementation);
-        return () -> checking(type, reference.get(), factory.create());
+        return () -> checking(model, tester.wrap(new ArrayDeque<>()), factory.create());
     }
 
     protected void checkImplementation(final Class<?> implementation) {
@@ -119,9 +121,9 @@ public class ArrayQueueTest<T extends ArrayQueueTest.Queue> extends ReflectionTe
             counter.nextTest();
             final T queue = queues.get(random.nextInt(queues.size()));
             if (queue.isEmpty() || random.nextDouble() < addFreq) {
-                add(queue, randomElement());
+                tester.add(queue, randomElement(), random);
             } else {
-                remove(queue);
+                tester.remove(queue, random);
             }
 
             final int size = checkAndSize(queue);
@@ -131,7 +133,7 @@ public class ArrayQueueTest<T extends ArrayQueueTest.Queue> extends ReflectionTe
                 ops -= size;
 
                 counter.nextTest();
-                queues.addAll(linearTest(queue));
+                queues.addAll(tester.linearTest(queue, random));
                 checkAndSize(queue);
                 counter.passed();
             }
@@ -139,9 +141,10 @@ public class ArrayQueueTest<T extends ArrayQueueTest.Queue> extends ReflectionTe
 
         for (final T queue : queues) {
             counter.nextTest();
-            linearTest(queue);
+            tester.linearTest(queue, random);
+            checkAndSize(queue);
             for (int i = queue.size(); i > 0; i--) {
-                remove(queue);
+                tester.remove(queue, random);
                 checkAndSize(queue);
             }
             counter.passed();
@@ -153,26 +156,9 @@ public class ArrayQueueTest<T extends ArrayQueueTest.Queue> extends ReflectionTe
     private int checkAndSize(final T queue) {
         final int size = queue.size();
         if (!queue.isEmpty() && random.nextBoolean()) {
-            check(queue);
+            tester.check(queue, random);
         }
         return size;
-    }
-
-    protected void remove(final T queue) {
-        queue.dequeue();
-    }
-
-    protected void check(final T queue) {
-        queue.element();
-    }
-
-    protected void add(final T queue, final Object element) {
-        queue.enqueue(element);
-    }
-
-    protected List<T> linearTest(final T queue) {
-        // Do nothing by default
-        return List.of();
     }
 
     protected Object randomElement() {
@@ -189,71 +175,82 @@ public class ArrayQueueTest<T extends ArrayQueueTest.Queue> extends ReflectionTe
 
     @Override
     protected void checkResult(final String call, final Object expected, final Object actual) {
-        if (expected instanceof Queue) {
-            super.checkResult(call, toList((Queue) expected), toList((Queue) actual));
+        if (expected instanceof Model) {
+            super.checkResult(call, toList((Model) expected), toList((Model) actual));
         } else {
             super.checkResult(call, expected, actual);
         }
     }
 
-    private static List<Object> toList(final Queue queue) {
+    private static List<Object> toList(final Model queue) {
         final List<Object> list = Stream.generate(queue::dequeue).limit(queue.size()).collect(Collectors.toUnmodifiableList());
         list.forEach(queue::enqueue);
         return list;
     }
 
+    protected static ArrayDeque<Object> collect(final Stream<Object> elements) {
+        return elements.collect(Collectors.toCollection(ArrayDeque::new));
+    }
+
     /**
      * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
      */
-    protected interface Queue {
-        void enqueue(Object element);
-        Object element();
-        Object dequeue();
-        int size();
-        boolean isEmpty();
-        void clear();
+    protected interface Model {
+        @Ignore
+        ArrayDeque<Object> model();
+
+        default Object dequeue() {
+            return model().removeFirst();
+        }
+
+        default int size() {
+            return model().size();
+        }
+
+        default boolean isEmpty() {
+            return model().isEmpty();
+        }
+
+        default void clear() {
+            model().clear();
+        }
+
+        default void enqueue(final Object element) {
+            model().addLast(element);
+        }
+
+        default Object element() {
+            return model().getFirst();
+        }
     }
 
-    protected static class ReferenceQueue implements Queue {
-        protected final Deque<Object> deque;
+    protected interface Tester<T extends Model> {
+        T wrap(ArrayDeque<Object> reference);
 
-        public ReferenceQueue(final Stream<Object> elements) {
-            deque = elements.collect(Collectors.toCollection(ArrayDeque::new));
+        default List<T> linearTest(final T queue, final Random random) {
+            // Do nothing by default
+            return List.of();
         }
 
-        @Override
-        public void enqueue(final Object element) {
-            deque.addLast(element);
+        default void check(final T queue, final Random random) {
+            queue.element();
         }
 
-        @Override
-        public Object element() {
-            return deque.getFirst();
+        default void add(final T queue, final Object element, final Random random) {
+            queue.enqueue(element);
         }
 
-        @Override
-        public Object dequeue() {
-            return deque.removeFirst();
+        default Object randomElement(final Random random) {
+            return ELEMENTS[random.nextInt(ELEMENTS.length)];
         }
 
-        @Override
-        public int size() {
-            return deque.size();
+        default void remove(final T queue, final Random random) {
+            queue.dequeue();
         }
 
-        @Override
-        public boolean isEmpty() {
-            return deque.isEmpty();
-        }
-
-        @Override
-        public void clear() {
-            deque.clear();
-        }
-
-        @Override
-        public String toString() {
-            return deque.toString();
+        @SuppressWarnings("unchecked")
+        default T cast(final Model model) {
+            return (T) model;
         }
     }
 }

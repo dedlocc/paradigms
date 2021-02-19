@@ -21,10 +21,10 @@ public class MainChecker extends Randomized {
 
     public MainChecker(final String className) {
         try {
-            final URL url = new File(".").toURI().toURL();
-            final Class<?> clazz = new URLClassLoader(new URL[]{url}).loadClass(className);
-//            clazz.newInstance();
-            method = clazz.getMethod("main", String[].class);
+            final ClassLoader classLoader = System.getProperty("cp-only") == null
+                ? new URLClassLoader(new URL[]{new File(".").toURI().toURL()})
+                : Thread.currentThread().getContextClassLoader();
+            method = classLoader.loadClass(className).getMethod("main", String[].class);
         } catch (final Exception e) {
             throw new AssertionError("Could not found main(String[]) in class "  + className, e);
         }

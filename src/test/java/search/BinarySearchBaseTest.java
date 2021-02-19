@@ -48,6 +48,10 @@ public class BinarySearchBaseTest {
         );
     }
 
+    protected static int[] sortedInts(final MainChecker checker, final int size, final int max) {
+        return checker.random.ints(size, -max, max + 1).sorted().distinct().toArray();
+    }
+
     interface Solver {
         long[] solve(final int x, final int... a);
     }

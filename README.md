@@ -18,6 +18,12 @@
     * Дублирования кода быть не должно
     * [Исходный код тестов](java/queue/ArrayQueueToArrayTest.java)
     * [Откомпилированные тесты](artifacts/queue/ArrayQueueToArrayTest.jar)
+ * *Indexed* (34-35)
+    * Реализовать методы
+        * `get` – получить элемент по индексу, отсчитываемому с головы
+        * `set` – заменить элемент по индексу, отсчитываемому с головы
+    * [Исходный код тестов](java/queue/ArrayQueueIndexedTest.java)
+    * [Откомпилированные тесты](artifacts/queue/ArrayQueueIndexedTest.jar)
 
 
 ## Домашнее задание 1. Бинарный поиск

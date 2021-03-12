@@ -44,6 +44,14 @@
           лежащие в очереди в порядке от головы к хвосту.
     * [Исходный код тестов](java/queue/QueueIndexedToArrayTest.java)
     * [Откомпилированные тесты](artifacts/queue/QueueIndexedToArrayTest.jar)
+ * *Contains* (36-37)
+    * Добавить в интерфейс очереди и реализовать методы
+        * `contains(element)` – проверяет, содержится ли элемент в очереди
+        * `removeFirstOccurrence(element)` – удаляет первое вхождение элемента в очередь 
+            и возвращает было ли такое
+    * Дублирования кода быть не должно
+    * [Исходный код тестов](java/queue/QueueContainsTest.java)
+    * [Откомпилированные тесты](artifacts/queue/QueueContainsTest.jar)
 
 
 ## Домашнее задание 2. Очередь на массиве

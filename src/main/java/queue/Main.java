@@ -25,6 +25,7 @@ public final class Main {
         testClass();
     }
 
+
     private static void testModule() {
         System.out.println("Queue:");
 

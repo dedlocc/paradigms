@@ -41,6 +41,6 @@ public interface Queue {
 
     // Pre:  true
     // Post: R == (i <= N') where i = min({j : a[j].equals(e)} U {N' + 1})
-    //       && M(1, i - 1) && M(i + 1, N', -1)) && N == max(N', i) - 1
+    //       && M(1, i - 1) && M(i + 1, N', -1) && N == max(N', i) - 1
     boolean removeFirstOccurrence(final Object e);
 }

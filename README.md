@@ -24,6 +24,9 @@
     * Код находится в файле [functionalMiniExpression.js](javascript/functionalMiniExpression.js).
     * [Исходный код тестов](javascript/jstest/functional/FunctionalMiniTest.java)
         * Запускать c аргументом `hard` или `easy`;
+ * *Variables*. Дополнительно реализовать поддержку:
+    * переменных: `y`, `z`;
+    * [Исходный код тестов](javascript/jstest/functional/FunctionalVariablesTest.java)
 
 Запуск тестов
  * Для запуска тестов используется [GraalJS](https://github.com/graalvm/graaljs)

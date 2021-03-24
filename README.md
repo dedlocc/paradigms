@@ -27,6 +27,12 @@
  * *Variables*. Дополнительно реализовать поддержку:
     * переменных: `y`, `z`;
     * [Исходный код тестов](javascript/jstest/functional/FunctionalVariablesTest.java)
+ * *OneTwo*. Дополнительно реализовать поддержку:
+    * переменных: `y`, `z`;
+    * констант:
+        * `one` – 1;
+        * `two` – 2;
+    * [Исходный код тестов](javascript/jstest/functional/FunctionalOneTwoTest.java)
 
 Запуск тестов
  * Для запуска тестов используется [GraalJS](https://github.com/graalvm/graaljs)

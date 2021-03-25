@@ -3,6 +3,15 @@
 [Условия домашних заданий](http://www.kgeorgiy.info/courses/paradigms/homeworks.html)
 
 
+## Домашнее задание 6. Объектные выражения на JavaScript
+
+Модификации
+ * *Базовая*
+    * Код должен находиться в файле `objectExpression.js`.
+    * [Исходный код тестов](javascript/jstest/object/ObjectExpressionTest.java)
+        * Запускать c аргументом `easy`, `hard` или `bonus`.
+
+
 ## Домашнее задание 5. Функциональные выражения на JavaScript
 
 Модификации
@@ -15,6 +24,15 @@
     * Код находится в файле [functionalMiniExpression.js](javascript/functionalMiniExpression.js).
     * [Исходный код тестов](javascript/jstest/functional/FunctionalMiniTest.java)
         * Запускать c аргументом `hard` или `easy`;
+ * *Variables*. Дополнительно реализовать поддержку:
+    * переменных: `y`, `z`;
+    * [Исходный код тестов](javascript/jstest/functional/FunctionalVariablesTest.java)
+ * *OneTwo*. Дополнительно реализовать поддержку:
+    * переменных: `y`, `z`;
+    * констант:
+        * `one` – 1;
+        * `two` – 2;
+    * [Исходный код тестов](javascript/jstest/functional/FunctionalOneTwoTest.java)
 
 Запуск тестов
  * Для запуска тестов используется [GraalJS](https://github.com/graalvm/graaljs)
@@ -58,6 +76,11 @@
  * [Функции высшего порядка](javascript/examples/1_3_functions-hi.js).
    Обратите внимание на реализацию функции `mCurry`.
 
+Лекция 2. Объекты и методы
+ * [Объекты](javascript/examples/2_1_objects.js)
+ * [Замыкания](javascript/examples/2_2_closures.js)
+ * [Модули](javascript/examples/2_3_modules.js)
+ * [Пример: стеки](javascript/examples/2_4_stacks.js)
 
 ## Домашнее задание 4. Вычисление в различных типах
 

@@ -1,37 +1,60 @@
 'use strict';
 
 const cnst = value => _ => value;
-const variable = () => x => x;
+const variable = name => {
+    const index = vars[name];
+    return (...values) => values[index];
+};
 
-const biOp = f => (first, second) => x => f(first(x), second(x));
+const op = f => (...args) => (...values) => f(...args.map(arg => arg(...values)));
 
-const add = biOp((a, b) => a + b);
-const subtract = biOp((a, b) => a - b);
-const multiply = biOp((a, b) => a * b);
-const divide = biOp((a, b) => a / b);
+const add = op((a, b) => a + b);
+const subtract = op((a, b) => a - b);
+const multiply = op((a, b) => a * b);
+const divide = op((a, b) => a / b);
 
-const negate = e => x => -e(x);
+const negate = op(x => -x);
 
-const flip = f => (a, b) => f(b, a);
+const min5 = op(Math.min);
+const max3 = op(Math.max);
 
-const binaryOperations = {
-    '+': add,
-    '-': subtract,
-    '*': multiply,
-    '/': divide,
+const one = cnst(1);
+const two = cnst(2);
+
+const vars = {
+    'x': 0,
+    'y': 1,
+    'z': 2,
+};
+
+const constTokens = {
+    'one': one,
+    'two': two,
+};
+
+const operations = {
+    '+': [add, 2],
+    '-': [subtract, 2],
+    '*': [multiply, 2],
+    '/': [divide, 2],
+    'negate': [negate, 1],
+    'min5': [min5, 5],
+    'max3': [max3, 3],
 };
 
 const parse = input => {
     const stack = [];
 
     for (let token of input.trim().split(/\s+/)) {
-        token = token.trim();
-        if ('x' === token) {
-            stack.push(variable('x'));
-        } else if (token in binaryOperations) {
-            stack.push(flip(binaryOperations[token])(stack.pop(), stack.pop()));
+        if (token in vars) {
+            stack.push(variable(token));
+        } else if (token in constTokens) {
+            stack.push(constTokens[token]);
+        } else if (token in operations) {
+            const [op, arity] = operations[token];
+            stack.push(op(...stack.splice(-arity)));
         } else {
-            stack.push(cnst(+token))
+            stack.push(cnst(+token));
         }
     }
 

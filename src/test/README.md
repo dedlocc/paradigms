@@ -24,15 +24,24 @@
     * Код находится в файле [functionalMiniExpression.js](javascript/functionalMiniExpression.js).
     * [Исходный код тестов](javascript/jstest/functional/FunctionalMiniTest.java)
         * Запускать c аргументом `hard` или `easy`;
- * *Variables*. Дополнительно реализовать поддержку:
+ * *Variables* (32, 33). Дополнительно реализовать поддержку:
     * переменных: `y`, `z`;
     * [Исходный код тестов](javascript/jstest/functional/FunctionalVariablesTest.java)
- * *OneTwo*. Дополнительно реализовать поддержку:
+ * *OneTwo* (34, 35). Дополнительно реализовать поддержку:
     * переменных: `y`, `z`;
     * констант:
         * `one` – 1;
         * `two` – 2;
     * [Исходный код тестов](javascript/jstest/functional/FunctionalOneTwoTest.java)
+ * *OneMinMax* (36, 37). Дополнительно реализовать поддержку:
+    * переменных: `y`, `z`;
+    * констант:
+        * `one` – 1;
+        * `two` – 2;
+    * операций:
+        * `min5` – минимальный из пяти аргументов, `3 1 4 0 2 min5` равно 0;
+        * `max3` – максимальный из трех аргументов, `3 1 4 max3` равно 4.
+    * [Исходный код тестов](javascript/jstest/functional/FunctionalOneMinMaxTest.java)
 
 Запуск тестов
  * Для запуска тестов используется [GraalJS](https://github.com/graalvm/graaljs)

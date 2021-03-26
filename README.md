@@ -7,7 +7,7 @@
 
 Модификации
  * *Базовая*
-    * Код должен находиться в файле `objectExpression.js`.
+    * Код должен находиться в файле `javascript-solutions/objectExpression.js`.
     * [Исходный код тестов](javascript/jstest/object/ObjectExpressionTest.java)
         * Запускать c аргументом `easy`, `hard` или `bonus`.
 
@@ -16,7 +16,7 @@
 
 Модификации
  * *Базовая*
-    * Код должен находиться в файле `functionalExpression.js`.
+    * Код должен находиться в файле `javascript-solutions/functionalExpression.js`.
     * [Исходный код тестов](javascript/jstest/functional/FunctionalExpressionTest.java)
         * Запускать c аргументом `hard` или `easy`;
  * *Mini* (для тестирования)
@@ -100,6 +100,18 @@
  * [Замыкания](javascript/examples/2_2_closures.js)
  * [Модули](javascript/examples/2_3_modules.js)
  * [Пример: стеки](javascript/examples/2_4_stacks.js)
+
+Лекция 3. Другие возможности
+ * [Обработка ошибок](javascript/examples/3_1_errors.js)
+ * [Чего нет в JS](javascript/examples/3_2_no.js)
+ * [Стандартная библиотека](javascript/examples/3_3_builtins.js)
+ * [Работа со свойствами](javascript/examples/3_4_properties.js)
+ * [Методы и классы](javascript/examples/3_5_classes.js)
+ * [JS 6+](javascript/examples/3_6_js6.js)
+ * Модули: 
+   [объявление](javascript/examples/3_7_js6_module.mjs)
+   [использование](javascript/examples/3_7_js6_module_usage.mjs)
+
 
 ## Домашнее задание 4. Вычисление в различных типах
 

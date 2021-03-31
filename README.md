@@ -19,11 +19,16 @@
     * Код должен находиться в файле `javascript-solutions/objectExpression.js`.
     * [Исходный код тестов](javascript/jstest/object/ObjectExpressionTest.java)
         * Запускать c аргументом `easy`, `hard` или `bonus`.
- * *ArcTan* (32, 33, 36, 37). Дополнительно реализовать поддержку:
+ * *ArcTan* (32, 33). Дополнительно реализовать поддержку:
     * функций:
         * `ArcTan` (`atan`) – арктангенс, `1256 atan` примерно равно 1.57;
         * `ArcTan2` (`atan2`) – арктангенс, `841 540 atan2` примерно равно 1;
     * [Исходный код тестов](javascript/jstest/object/ObjectArcTanTest.java)
+ * *Harmonic* (38, 39). Дополнительно реализовать поддержку:
+    * функций от двух аргументов:
+        * `Hypot` (`hypot`) – квадрат гипотенузы, `3 4 hypot` равно 25;
+        * `HMean` (`hmean`) – гармоническое целое, `5 20 hmean` равно 8;
+    * [Исходный код тестов](javascript/jstest/object/ObjectHarmonicTest.java)
 
 
 ## Домашнее задание 5. Функциональные выражения на JavaScript

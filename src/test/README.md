@@ -24,10 +24,20 @@
         * `ArcTan` (`atan`) – арктангенс, `1256 atan` примерно равно 1.57;
         * `ArcTan2` (`atan2`) – арктангенс, `841 540 atan2` примерно равно 1;
     * [Исходный код тестов](javascript/jstest/object/ObjectArcTanTest.java)
+ * *AvgMed* (34, 35). Дополнительно реализовать поддержку:
+    * функций:
+        * `Avg5` (`avg5`) – арифметическое среднее пяти аргументов, `1 2 3 4 5 avg5` равно 3;
+        * `Med3` (`med3`) – медиана трех аргументов, `1 2 -10 med3` равно 1.
+    * [Исходный код тестов](javascript/jstest/functional/FunctionalAvgMedTest.java)
+ * *Cube* (36, 37). Дополнительно реализовать поддержку:
+    * унарных функций:
+        * `Cube` (`cube`) – возведение в куб, `3 square` равно 27;
+        * `Cbrt` (`cbrt`) – извлечение кубического корня, `-27 cbrt` равно −3;
+    * [Исходный код тестов](javascript/jstest/object/ObjectCubeTest.java)
  * *Harmonic* (38, 39). Дополнительно реализовать поддержку:
     * функций от двух аргументов:
         * `Hypot` (`hypot`) – квадрат гипотенузы, `3 4 hypot` равно 25;
-        * `HMean` (`hmean`) – гармоническое целое, `5 20 hmean` равно 8;
+        * `HMean` (`hmean`) – гармоническое среднее, `5 20 hmean` равно 8;
     * [Исходный код тестов](javascript/jstest/object/ObjectHarmonicTest.java)
 
 

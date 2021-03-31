@@ -19,6 +19,11 @@
     * Код должен находиться в файле `javascript-solutions/objectExpression.js`.
     * [Исходный код тестов](javascript/jstest/object/ObjectExpressionTest.java)
         * Запускать c аргументом `easy`, `hard` или `bonus`.
+ * *ArcTan* (32, 33, 36, 37). Дополнительно реализовать поддержку:
+    * функций:
+        * `ArcTan` (`atan`) – арктангенс, `1256 atan` примерно равно 1.57;
+        * `ArcTan2` (`atan2`) – арктангенс, `841 540 atan2` примерно равно 1;
+    * [Исходный код тестов](javascript/jstest/object/ObjectArcTanTest.java)
 
 
 ## Домашнее задание 5. Функциональные выражения на JavaScript

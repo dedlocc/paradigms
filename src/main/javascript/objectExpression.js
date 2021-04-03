@@ -20,6 +20,7 @@ class Const {
 
 Const.ZERO = new Const(0);
 Const.ONE = new Const(1);
+Const.NEG_ONE = new Const(-1);
 Const.E = new Const(Math.E);
 
 class Variable {
@@ -56,6 +57,13 @@ class Operation {
         return this.func(...this.args.map(o => o.evaluate(...vars)));
     }
 
+    diff(d) {
+        return this.args.map((o, arg) => new Multiply(
+            o.diff(d),
+            this.derivative(arg)
+        )).reduce((a, b) => new Add(a, b));
+    }
+
     toString() {
         return this.args.join(' ') + ' ' + this.constructor.operator;
     }
@@ -74,8 +82,8 @@ class Add extends Operation {
         return a + b;
     }
 
-    diff(d) {
-        return new Add(this.args[0].diff(d), this.args[1].diff(d));
+    derivative() {
+        return Const.ONE;
     }
 }
 Operation.register(Add, '+');
@@ -85,8 +93,8 @@ class Subtract extends Operation {
         return a - b;
     }
 
-    diff(d) {
-        return new Subtract(this.args[0].diff(d), this.args[1].diff(d));
+    derivative(arg) {
+        return 0 === arg ? Const.ONE : new Const(-1);
     }
 }
 Operation.register(Subtract, '-');
@@ -96,12 +104,8 @@ class Multiply extends Operation {
         return a * b;
     }
 
-    diff(d) {
-        const [u, v] = this.args;
-        return new Add(
-            new Multiply(u.diff(d), v),
-            new Multiply(v.diff(d), u)
-        );
+    derivative(arg) {
+        return this.args[1 - arg];
     }
 }
 Operation.register(Multiply, '*');
@@ -111,15 +115,13 @@ class Divide extends Operation {
         return a / b;
     }
 
-    diff(d) {
-        const [u, v] = this.args;
-        return new Divide(
-            new Subtract(
-                new Multiply(u.diff(d), v),
-                new Multiply(v.diff(d), u)
-            ),
-            new Multiply(v, v)
-        );
+    derivative(arg) {
+        return 0 === arg
+            ? new Divide(Const.ONE, this.args[1])
+            : new Divide(
+                new Negate(this.args[0]),
+                new Multiply(this.args[1], this.args[1])
+            );
     }
 }
 Operation.register(Divide, '/');
@@ -129,14 +131,10 @@ class Cube extends Operation {
         return x ** 3;
     }
 
-    diff(d) {
-        const f = this.args[0];
+    derivative() {
         return new Multiply(
-            new Multiply(
-                new Const(3),
-                f.diff(d)
-            ),
-            new Multiply(f, f)
+            new Const(3),
+            new Multiply(this.args[0], this.args[0])
         );
     }
 }
@@ -147,13 +145,14 @@ class Cbrt extends Operation {
         return Math.cbrt(x);
     }
 
-    diff(d) {
-        const f = this.args[0];
+    derivative() {
         return new Divide(
-            f.diff(d),
+            Const.ONE,
             new Multiply(
                 new Const(3),
-                new Cbrt(new Multiply(f, f))
+                new Cbrt(
+                    new Multiply(this.args[0], this.args[0])
+                )
             )
         );
     }
@@ -165,8 +164,8 @@ class Negate extends Operation {
         return -x;
     }
 
-    diff(d) {
-        return new Negate(this.args[0].diff(d));
+    derivative() {
+        return Const.NEG_ONE;
     }
 }
 Operation.register(Negate, 'negate');

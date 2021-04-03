@@ -16,6 +16,14 @@ class Const {
     toString() {
         return this.value.toString();
     }
+
+    simplify() {
+        return this;
+    }
+
+    equals(expr) {
+        return expr instanceof Const && expr.value === this.value;
+    }
 }
 
 Const.ZERO = new Const(0);
@@ -39,6 +47,10 @@ class Variable {
 
     toString() {
         return this.name;
+    }
+
+    simplify() {
+        return this;
     }
 }
 
@@ -68,6 +80,17 @@ class Operation {
         return this.args.join(' ') + ' ' + this.constructor.operator;
     }
 
+    simplify() {
+        return new this.constructor(...this.args.map(o => o.simplify()))._simplifyImpl();
+    }
+
+    _simplifyImpl() {
+        if (this.args.every(o => o instanceof Const)) {
+            return new Const(this.evaluate());
+        }
+        return this;
+    }
+
     static register(operation, operator) {
         operation.arity = operation.prototype.func.length;
         operation.operator = operator;
@@ -85,6 +108,17 @@ class Add extends Operation {
     derivative() {
         return Const.ONE;
     }
+
+    _simplifyImpl() {
+        const [u, v] = this.args;
+        if (Const.ZERO.equals(v)) {
+            return u;
+        }
+        if (Const.ZERO.equals(u)) {
+            return v;
+        }
+        return super._simplifyImpl();
+    }
 }
 Operation.register(Add, '+');
 
@@ -95,6 +129,17 @@ class Subtract extends Operation {
 
     derivative(arg) {
         return 0 === arg ? Const.ONE : new Const(-1);
+    }
+
+    _simplifyImpl() {
+        const [u, v] = this.args;
+        if (Const.ZERO.equals(v)) {
+            return u;
+        }
+        if (Const.ZERO.equals(u)) {
+            return new Negate(v);
+        }
+        return super._simplifyImpl();
     }
 }
 Operation.register(Subtract, '-');
@@ -107,6 +152,17 @@ class Multiply extends Operation {
     derivative(arg) {
         return this.args[1 - arg];
     }
+
+    _simplifyImpl() {
+        const [u, v] = this.args;
+        if (Const.ZERO.equals(u) || Const.ONE.equals(v)) {
+            return u;
+        }
+        if (Const.ZERO.equals(v) || Const.ONE.equals(u)) {
+            return v;
+        }
+        return super._simplifyImpl();
+    }
 }
 Operation.register(Multiply, '*');
 
@@ -116,12 +172,21 @@ class Divide extends Operation {
     }
 
     derivative(arg) {
+        const [u, v] = this.args;
         return 0 === arg
-            ? new Divide(Const.ONE, this.args[1])
+            ? new Divide(Const.ONE, v)
             : new Divide(
-                new Negate(this.args[0]),
-                new Multiply(this.args[1], this.args[1])
+                new Negate(u),
+                new Multiply(v, v)
             );
+    }
+
+    _simplifyImpl() {
+        const [u, v] = this.args;
+        if (Const.ZERO.equals(u) || Const.ONE.equals(v)) {
+            return u;
+        }
+        return super._simplifyImpl();
     }
 }
 Operation.register(Divide, '/');
@@ -132,9 +197,10 @@ class Cube extends Operation {
     }
 
     derivative() {
+        const [f] = this.args;
         return new Multiply(
             new Const(3),
-            new Multiply(this.args[0], this.args[0])
+            new Multiply(f, f)
         );
     }
 }
@@ -146,12 +212,13 @@ class Cbrt extends Operation {
     }
 
     derivative() {
+        const [f] = this.args;
         return new Divide(
             Const.ONE,
             new Multiply(
                 new Const(3),
                 new Cbrt(
-                    new Multiply(this.args[0], this.args[0])
+                    new Multiply(f, f)
                 )
             )
         );

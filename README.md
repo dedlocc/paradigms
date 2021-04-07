@@ -10,6 +10,11 @@
     * Код должен находиться в файле `javascript-solutions/objectExpression.js`.
     * [Исходный код тестов](javascript/jstest/prefix/PrefixParserTest.java)
         * Запускать c аргументом `easy` или `hard`
+ * *PrefixSinhCosh*. (32-33) Дополнительно реализовать поддержку:
+    * унарных операций:
+        * `Sinh` (`sinh`) – гиперболический синус, `(sinh 3)` немного больше 10;
+        * `Cosh` (`cosh`) – гиперболический косинус, `(cosh 3)` немного меньше 10;
+    * [Исходный код тестов](javascript/jstest/prefix/PrefixSinhCoshTest.java)
 
 
 ## Домашнее задание 6. Объектные выражения на JavaScript

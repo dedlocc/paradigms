@@ -39,10 +39,10 @@
     * функций:
         * `Avg5` (`avg5`) – арифметическое среднее пяти аргументов, `1 2 3 4 5 avg5` равно 3;
         * `Med3` (`med3`) – медиана трех аргументов, `1 2 -10 med3` равно 1.
-    * [Исходный код тестов](javascript/jstest/functional/FunctionalAvgMedTest.java)
+    * [Исходный код тестов](javascript/jstest/object/ObjectAvgMedTest.java)
  * *Cube* (36, 37). Дополнительно реализовать поддержку:
     * унарных функций:
-        * `Cube` (`cube`) – возведение в куб, `3 square` равно 27;
+        * `Cube` (`cube`) – возведение в куб, `3 cube` равно 27;
         * `Cbrt` (`cbrt`) – извлечение кубического корня, `-27 cbrt` равно −3;
     * [Исходный код тестов](javascript/jstest/object/ObjectCubeTest.java)
  * *Harmonic* (38, 39). Дополнительно реализовать поддержку:

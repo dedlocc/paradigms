@@ -27,6 +27,12 @@
         * `Sumsq` (`sumsq`) – сумма квадратов, `(1 2 3 sumsq)` равно 14;
         * `Length` (`length`у) – длина вектора, `(3 4 length)` равно 5;
     * [Исходный код тестов](javascript/jstest/prefix/PostfixSumsqLengthTest.java)
+ * *PrefixMeans*. Дополнительно реализовать поддержку:
+    * операций произвольного числа аргументов:
+        * `ArithMean` (`arith-mean`) – арифметическое среднее `(arith-mean 1 2 6)` равно 3;
+        * `GeomMean` (`geom-mean`) – геометрическое среднее `(geom-mean 1 2 4)` равно 2;
+        * `HarmMean` (`harm-mean`) – гармоническое среднее, `(harm-mean 2 3 6)` равно 3;
+    * [Исходный код тестов](javascript/jstest/prefix/PrefixMeansTest.java)
 
 
 ## Домашнее задание 6. Объектные выражения на JavaScript

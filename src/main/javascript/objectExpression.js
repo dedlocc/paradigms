@@ -66,13 +66,13 @@ class Operation {
     }
 
     evaluate(...vars) {
-        return this.func(...this.args.map(o => o.evaluate(...vars)));
+        return this.func(...this.args.map(arg=> arg.evaluate(...vars)));
     }
 
     diff(d) {
-        return this.args.map((o, arg) => new Multiply(
-            o.diff(d),
-            this.derivative(arg)
+        return this.args.map((arg, i) => new Multiply(
+            arg.diff(d),
+            this.derivative(i)
         )).reduce((a, b) => new Add(a, b));
     }
 
@@ -81,11 +81,11 @@ class Operation {
     }
 
     simplify() {
-        return new this.constructor(...this.args.map(o => o.simplify()))._simplifyImpl();
+        return new this.constructor(...this.args.map(arg => arg.simplify()))._simplifyImpl();
     }
 
     _simplifyImpl() {
-        if (this.args.every(o => o instanceof Const)) {
+        if (this.args.every(arg => arg instanceof Const)) {
             return new Const(this.evaluate());
         }
         return this;

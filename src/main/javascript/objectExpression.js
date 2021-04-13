@@ -17,17 +17,18 @@ class Const {
         return this.value.toString();
     }
 
-    simplify() {
-        return this;
+    prefix() {
+        return this.toString();
     }
 
-    equals(expr) {
-        return expr instanceof Const && expr.value === this.value;
+    postfix() {
+        return this.toString();
     }
 }
 
 Const.ZERO = new Const(0);
 Const.ONE = new Const(1);
+Const.TWO = new Const(2);
 Const.NEG_ONE = new Const(-1);
 Const.E = new Const(Math.E);
 
@@ -42,15 +43,19 @@ class Variable {
     }
 
     diff(d) {
-        return new Const(d === this.name ? 1 : 0);
+        return d === this.name ? Const.ONE : Const.ZERO;
     }
 
     toString() {
         return this.name;
     }
 
-    simplify() {
-        return this;
+    prefix() {
+        return this.toString();
+    }
+
+    postfix() {
+        return this.toString();
     }
 }
 
@@ -70,25 +75,24 @@ class Operation {
     }
 
     diff(d) {
-        return this.args.map((arg, i) => new Multiply(
-            arg.diff(d),
-            this.derivative(i)
-        )).reduce((a, b) => new Add(a, b));
+        return 0 === this.args.length
+            ? Const.ZERO
+            : this.args.map((arg, i) => new Multiply(
+                arg.diff(d),
+                this.derivative(i)
+            )).reduce((a, b) => new Add(a, b));
     }
 
     toString() {
-        return this.args.join(' ') + ' ' + this.constructor.operator;
+        return `${this.args.join(' ')} ${this.constructor.operator}`;
     }
 
-    simplify() {
-        return new this.constructor(...this.args.map(arg => arg.simplify()))._simplifyImpl();
+    prefix() {
+        return `(${this.constructor.operator} ${this.args.map(arg => arg.prefix()).join(' ')})`;
     }
 
-    _simplifyImpl() {
-        if (this.args.every(arg => arg instanceof Const)) {
-            return new Const(this.evaluate());
-        }
-        return this;
+    postfix() {
+        return `(${this.args.map(arg => arg.postfix()).join(' ')} ${this.constructor.operator})`;
     }
 
     static register(operation, operator) {
@@ -108,17 +112,6 @@ class Add extends Operation {
     derivative() {
         return Const.ONE;
     }
-
-    _simplifyImpl() {
-        const [u, v] = this.args;
-        if (Const.ZERO.equals(v)) {
-            return u;
-        }
-        if (Const.ZERO.equals(u)) {
-            return v;
-        }
-        return super._simplifyImpl();
-    }
 }
 Operation.register(Add, '+');
 
@@ -128,18 +121,7 @@ class Subtract extends Operation {
     }
 
     derivative(arg) {
-        return 0 === arg ? Const.ONE : new Const(-1);
-    }
-
-    _simplifyImpl() {
-        const [u, v] = this.args;
-        if (Const.ZERO.equals(v)) {
-            return u;
-        }
-        if (Const.ZERO.equals(u)) {
-            return new Negate(v);
-        }
-        return super._simplifyImpl();
+        return 0 === arg ? Const.ONE : Const.NEG_ONE;
     }
 }
 Operation.register(Subtract, '-');
@@ -151,17 +133,6 @@ class Multiply extends Operation {
 
     derivative(arg) {
         return this.args[1 - arg];
-    }
-
-    _simplifyImpl() {
-        const [u, v] = this.args;
-        if (Const.ZERO.equals(u) || Const.ONE.equals(v)) {
-            return u;
-        }
-        if (Const.ZERO.equals(v) || Const.ONE.equals(u)) {
-            return v;
-        }
-        return super._simplifyImpl();
     }
 }
 Operation.register(Multiply, '*');
@@ -180,51 +151,30 @@ class Divide extends Operation {
                 new Multiply(v, v)
             );
     }
-
-    _simplifyImpl() {
-        const [u, v] = this.args;
-        if (Const.ZERO.equals(u) || Const.ONE.equals(v)) {
-            return u;
-        }
-        return super._simplifyImpl();
-    }
 }
 Operation.register(Divide, '/');
 
-class Cube extends Operation {
-    func(x) {
-        return x ** 3;
+class Sumsq extends Operation {
+    func(...args) {
+        return args.reduce((sum, x) => sum + x * x, 0);
     }
 
-    derivative() {
-        const [f] = this.args;
-        return new Multiply(
-            new Const(3),
-            new Multiply(f, f)
-        );
+    derivative(arg) {
+        return new Multiply(Const.TWO, this.args[arg]);
     }
 }
-Operation.register(Cube, 'cube');
+Operation.register(Sumsq, 'sumsq');
 
-class Cbrt extends Operation {
-    func(x) {
-        return Math.cbrt(x);
+class Length extends Operation {
+    func(...args) {
+        return Math.sqrt(Sumsq.prototype.func(...args));
     }
 
-    derivative() {
-        const [f] = this.args;
-        return new Divide(
-            Const.ONE,
-            new Multiply(
-                new Const(3),
-                new Cbrt(
-                    new Multiply(f, f)
-                )
-            )
-        );
+    derivative(arg) {
+        return new Divide(this.args[arg], this);
     }
 }
-Operation.register(Cbrt, 'cbrt');
+Operation.register(Length, 'length');
 
 class Negate extends Operation {
     func(x) {
@@ -237,19 +187,135 @@ class Negate extends Operation {
 }
 Operation.register(Negate, 'negate');
 
-const parse = input => {
-    const stack = [];
+class ParseError extends Error {
+    constructor(message, position) {
+        super(`${message} at position ${1 + position}`);
+    }
+}
+ParseError.prototype.name = ParseError.name;
 
-    for (let token of input.trim().split(/\s+/)) {
-        if (Variable.registry.has(token)) {
-            stack.push(new Variable(token));
-        } else if (Operation.registry.has(token)) {
-            const op = Operation.registry.get(token);
-            stack.push(new op(...stack.splice(-op.arity)));
-        } else {
-            stack.push(new Const(+token));
+const createParser = (() => {
+    class Parser {
+        constructor(input) {
+            this.input = input;
+            this.index = 0;
+        }
+
+        parse() {
+            const expr = this.parseExpression();
+
+            if (this.hasNext()) {
+                throw new ParseError('End of string expected', this.index);
+            }
+
+            return expr;
+        }
+
+        parseExpression(inParentheses = false) {
+            const start = this.index;
+            this.skipWhitespaces();
+
+            const tokens = [];
+            while (this.hasNext() && ')' !== this.char()) {
+                if (this.test('(')) {
+                    tokens.push(this.parseExpression(true));
+                    if (!this.test(')')) {
+                        throw new ParseError('Missing )', 1 + this.index);
+                    }
+                } else {
+                    tokens.push(this.parseArgument());
+                }
+                this.skipWhitespaces();
+            }
+
+            if (0 === tokens.length) {
+                throw new ParseError('Empty expression', start);
+            }
+
+            const op = this.takeOp(tokens);
+            const isOp = op.prototype instanceof Operation;
+
+            if (inParentheses !== isOp) {
+                throw new ParseError('Malformed parentheses usage', start);
+            }
+
+            if (isOp) {
+                if (tokens.some(arg => !('evaluate' in arg))) {
+                    throw new ParseError('Unevaluable expression', start);
+                }
+
+                if (0 !== op.arity && op.arity !== tokens.length) {
+                    throw new ParseError('Invalid number of arguments', start);
+                }
+
+                return new op(...tokens);
+            }
+
+            if (0 !== tokens.length) {
+                throw new ParseError('Unexpected sequence of arguments', start);
+            }
+
+            return op;
+        }
+
+        parseArgument() {
+            const start = this.index;
+            this.skip(c => !' ()'.includes(c));
+            const token = this.input.substring(start, this.index);
+
+            if (Operation.registry.has(token)) {
+                return Operation.registry.get(token);
+            }
+
+            if (Variable.registry.has(token)) {
+                return new Variable(token);
+            }
+
+            const num = +token;
+
+            if (!isNaN(num)) {
+                return new Const(num);
+            }
+
+            throw new ParseError('Unknown argument type', start);
+        }
+
+        hasNext() {
+            return this.index < this.input.length;
+        }
+
+        char() {
+            return this.input[this.index];
+        }
+
+        test(char) {
+            if (char === this.char()) {
+                ++this.index;
+                return true;
+            }
+            return false;
+        }
+
+        skipWhitespaces() {
+            this.skip(c => ' ' === c);
+        }
+
+        skip(predicate) {
+            while (this.hasNext() && predicate(this.input[this.index])) {
+                ++this.index;
+            }
         }
     }
 
-    return stack.pop();
-};
+    return takeOp => {
+        class NewParser extends Parser {
+            takeOp(tokens) {
+                return takeOp(tokens);
+            }
+        }
+        return input => new NewParser(input).parse();
+    };
+})();
+
+const parsePrefix = createParser(tokens => tokens.shift());
+const parsePostfix = createParser(tokens => tokens.pop());

@@ -3,6 +3,46 @@
 [Условия домашних заданий](http://www.kgeorgiy.info/courses/paradigms/homeworks.html)
 
 
+## Домашнее задание 8. Линейная алгебра на Clojure
+
+Модификации
+ * *Базовая*
+    * Код должен находиться в файле `clojure-solutions/linear.clj`.
+    * [Исходный код тестов](clojure/cljtest/linear/LinearTest.java)
+        * Запускать c аргументом `easy` или `hard`
+
+Для запуска тестов можно использовать скрипты
+[TestClojure.cmd](clojure/TestClojure.cmd) и [TestClojure.sh](clojure/TestClojure.sh)
+ * Репозиторий должен быть скачан целиком.
+ * Скрипты должны находиться в каталоге `clojure`
+    (их нельзя перемещать, но можно вызывать из других каталогов).
+ * Полное имя класса теста указывается в качестве аргумента командной строки,
+    например, `cljtest.linear.LinearTest`.
+ * Тестируемое решение должно находиться в текущем каталоге.
+
+
+## Исходный код к лекциям по Clojure
+
+Запуск Clojure
+ * Консоль: [Windows](clojure/RunClojure.cmd), [*nix](clojure/RunClojure.sh)
+    * Интерактивный: `RunClojure`
+    * С выражением: `RunClojure --eval "<выражение>"`
+    * Скрипт: `RunClojure <файл скрипта>`
+    * Справка: `RunClojure --help`
+ * IDE
+    * IntelliJ Idea: [плагин Cursive](https://cursive-ide.com/userguide/)
+    * Eclipse: [плагин Counterclockwise](https://doc.ccw-ide.org/documentation.html)
+
+[Скрипт со всеми примерами](clojure/examples.clj)
+
+Лекция 1. Функции
+ * [Введение](clojure/examples/1_1_intro.clj)
+ * [Функции](clojure/examples/1_2_functions.clj)
+ * [Списки](clojure/examples/1_3_lists.clj)
+ * [Вектора](clojure/examples/1_4_vectors.clj)
+ * [Функции высшего порядка](clojure/examples/1_5_functions-2.clj)
+
+
 ## Домашнее задание 7. Обработка ошибок на JavaScript
 
 Модификации
@@ -27,6 +67,12 @@
         * `Sumsq` (`sumsq`) – сумма квадратов, `(1 2 3 sumsq)` равно 14;
         * `Length` (`length`у) – длина вектора, `(3 4 length)` равно 5;
     * [Исходный код тестов](javascript/jstest/prefix/PostfixSumsqLengthTest.java)
+ * *PrefixMeans*. Дополнительно реализовать поддержку:
+    * операций произвольного числа аргументов:
+        * `ArithMean` (`arith-mean`) – арифметическое среднее `(arith-mean 1 2 6)` равно 3;
+        * `GeomMean` (`geom-mean`) – геометрическое среднее `(geom-mean 1 2 4)` равно 2;
+        * `HarmMean` (`harm-mean`) – гармоническое среднее, `(harm-mean 2 3 6)` равно 3;
+    * [Исходный код тестов](javascript/jstest/prefix/PrefixMeansTest.java)
 
 
 ## Домашнее задание 6. Объектные выражения на JavaScript

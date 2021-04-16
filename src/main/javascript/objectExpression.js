@@ -154,6 +154,41 @@ class Divide extends Operation {
 }
 Operation.register(Divide, '/');
 
+class Cube extends Operation {
+    func(x) {
+        return x ** 3;
+    }
+
+    derivative() {
+        const [f] = this.args;
+        return new Multiply(
+            new Const(3),
+            new Multiply(f, f)
+        );
+    }
+}
+Operation.register(Cube, 'cube');
+
+class Cbrt extends Operation {
+    func(x) {
+        return Math.cbrt(x);
+    }
+
+    derivative() {
+        const [f] = this.args;
+        return new Divide(
+            Const.ONE,
+            new Multiply(
+                new Const(3),
+                new Cbrt(
+                    new Multiply(f, f)
+                )
+            )
+        );
+    }
+}
+Operation.register(Cbrt, 'cbrt');
+
 class Sumsq extends Operation {
     func(...args) {
         return args.reduce((sum, x) => sum + x * x, 0);
@@ -186,6 +221,23 @@ class Negate extends Operation {
     }
 }
 Operation.register(Negate, 'negate');
+
+const parse = input => {
+    const stack = [];
+
+    for (let token of input.trim().split(/\s+/)) {
+        if (Variable.registry.has(token)) {
+            stack.push(new Variable(token));
+        } else if (Operation.registry.has(token)) {
+            const op = Operation.registry.get(token);
+            stack.push(new op(...stack.splice(-op.arity)));
+        } else {
+            stack.push(new Const(+token));
+        }
+    }
+
+    return stack.pop();
+};
 
 class ParseError extends Error {
     constructor(message, position) {

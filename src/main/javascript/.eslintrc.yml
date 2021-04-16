@@ -1,0 +1,35 @@
+env:
+    es2020: true
+extends: eslint:recommended
+parserOptions:
+    sourceType: module
+rules:
+    indent:
+        - error
+        - 4
+    linebreak-style:
+        - error
+        - unix
+    quotes:
+        - error
+        - single
+    semi:
+        - error
+        - always
+    no-empty: error
+    no-unused-vars: warn
+    comma-dangle:
+        - error
+        -
+            arrays: always-multiline
+            objects: always-multiline
+            imports: always-multiline
+            exports: always-multiline
+
+    no-extra-parens: error
+    no-unexpected-multiline: error
+
+    block-scoped-var: warn
+    brace-style: warn
+    camelcase: warn
+    eol-last: warn

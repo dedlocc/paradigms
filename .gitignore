@@ -7,6 +7,3 @@ out/
 # Temporary files
 tmp/
 
-# Static code analysis
-.eslintrc.*
-.jshintrc

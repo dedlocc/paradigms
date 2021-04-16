@@ -245,7 +245,7 @@ const createParser = (() => {
                 }
 
                 if (0 !== op.arity && op.arity !== tokens.length) {
-                    throw new ParseError('Invalid number of arguments', start);
+                    throw new ParseError(`Expected ${op.arity} arguments, got ${tokens.length}`, start);
                 }
 
                 return new op(...tokens);
@@ -277,7 +277,7 @@ const createParser = (() => {
                 return new Const(num);
             }
 
-            throw new ParseError('Unknown argument type', start);
+            throw new ParseError(`Unknown argument type '${token}'`, start);
         }
 
         hasNext() {

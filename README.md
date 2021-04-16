@@ -72,7 +72,7 @@
         * `ArithMean` (`arith-mean`) – арифметическое среднее `(arith-mean 1 2 6)` равно 3;
         * `GeomMean` (`geom-mean`) – геометрическое среднее `(geom-mean 1 2 4)` равно 2;
         * `HarmMean` (`harm-mean`) – гармоническое среднее, `(harm-mean 2 3 6)` равно 3;
-    * [Исходный код тестов](javascript/jstest/prefix/PrefixMeansTest.java)
+    * [Исходный код тестов](javascript/jstest/prefix/PostfixMeansTest.java)
 
 
 ## Домашнее задание 6. Объектные выражения на JavaScript

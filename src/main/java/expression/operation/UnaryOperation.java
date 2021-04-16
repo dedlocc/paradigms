@@ -1,6 +1,6 @@
 package expression.operation;
 
-import expression.Expression;
+import expression.expr.Expression;
 import expression.eval.EvalMode;
 
 import java.util.function.UnaryOperator;

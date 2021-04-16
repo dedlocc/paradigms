@@ -1,6 +1,8 @@
 package expression.parser;
 
-import expression.*;
+import expression.expr.Const;
+import expression.expr.Expression;
+import expression.expr.Variable;
 import expression.operation.BinaryOperation;
 import expression.operation.UnaryOperation;
 

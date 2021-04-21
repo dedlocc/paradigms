@@ -2,11 +2,11 @@ package cljtest.functional;
 
 import cljtest.ClojureEngine;
 import cljtest.multi.MultiTests;
-import jstest.AbstractTests;
 import jstest.BaseJavascriptTest;
 import jstest.Language;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
@@ -32,17 +32,18 @@ public class ClojureFunctionalExpressionTest extends BaseJavascriptTest<ClojureE
         super(new ClojureEngine("expression.clj", evaluate), language, true);
     }
 
-    protected ClojureFunctionalExpressionTest(final AbstractTests tests) {
-        this(new Language(PARSED, UNPARSED, tests), Optional.empty());
-    }
-
     @Override
     protected String parse(final String expression) {
         return "(parseFunction \"" + expression + "\")";
     }
 
+    static void test(final String[] args, final Class<?> test, final Function<Boolean, ? extends MultiTests> multi) {
+        final Language language = new Language(PARSED, UNPARSED, multi.apply(mode(args, test)));
+        new ClojureFunctionalExpressionTest(language, Optional.empty()).run(test);
+    }
+
     public static void main(final String... args) {
-        new ClojureFunctionalExpressionTest(new MultiTests(mode(args, ClojureFunctionalExpressionTest.class))).run();
+        test(args, ClojureFunctionalExpressionTest.class, MultiTests::new);
     }
 
     protected static boolean mode(final String[] args, final Class<?> type) {

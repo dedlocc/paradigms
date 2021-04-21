@@ -19,6 +19,13 @@
     * Код должен находиться в файле `clojure-solutions/linear.clj`.
     * [Исходный код тестов](clojure/cljtest/linear/LinearTest.java)
         * Запускать c аргументом `easy` или `hard`
+ * *Cuboid* (32-33)
+    * Назовем _кубоидом_ трехмерную прямоугольную таблицу чисел.
+    * Добавьте операции поэлементного сложения (`c+`),
+        вычитания (`c-`), умножения (`c*`) и деления (`cd`) кубоидов.
+        Например, `(с+ [[[1] [2]] [[3] [4]]] [[[5] [6]] [[7] [8]]])` должно быть равно `[[[6] [8]] [[10] [12]]]`.
+    * [Исходный код тестов](clojure/cljtest/linear/LinearCuboidTest.java)
+
 
 Для запуска тестов можно использовать скрипты
 [TestClojure.cmd](clojure/TestClojure.cmd) и [TestClojure.sh](clojure/TestClojure.sh)

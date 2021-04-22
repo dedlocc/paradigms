@@ -3,6 +3,15 @@
 [Условия домашних заданий](http://www.kgeorgiy.info/courses/paradigms/homeworks.html)
 
 
+## Домашнее задание 9. Функциональные выражения на Clojure
+
+Модификации
+ * *Базовая*
+    * Код должен находиться в файле `clojure-solutions/expression.clj`.
+    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalExpressionTest.java)
+        * Запускать c аргументом `easy` или `hard`
+
+
 ## Домашнее задание 8. Линейная алгебра на Clojure
 
 Модификации
@@ -10,6 +19,19 @@
     * Код должен находиться в файле `clojure-solutions/linear.clj`.
     * [Исходный код тестов](clojure/cljtest/linear/LinearTest.java)
         * Запускать c аргументом `easy` или `hard`
+ * *Cuboid* (32-33)
+    * Назовем _кубоидом_ трехмерную прямоугольную таблицу чисел.
+    * Добавьте операции поэлементного сложения (`c+`),
+        вычитания (`c-`), умножения (`c*`) и деления (`cd`) кубоидов.
+        Например, `(с+ [[[1] [2]] [[3] [4]]] [[[5] [6]] [[7] [8]]])` должно быть равно `[[[6] [8]] [[10] [12]]]`.
+    * [Исходный код тестов](clojure/cljtest/linear/LinearCuboidTest.java)
+ * *Tensor* (34-35)
+    * Назовем _тензором_ многомерную прямоугольную таблицу чисел.
+    * Добавьте операции поэлементного сложения (`t+`),
+        вычитания (`t-`) и умножения (`t*`) тензоров.
+        Например, `(t+ [[1 2] [3 4]] [[5 6] [7 8]])` должно быть равно `[[6 8] [10 12]]`.
+    * [Исходный код тестов](clojure/cljtest/linear/LinearTensorTest.java)
+
 
 Для запуска тестов можно использовать скрипты
 [TestClojure.cmd](clojure/TestClojure.cmd) и [TestClojure.sh](clojure/TestClojure.sh)
@@ -42,6 +64,13 @@
  * [Вектора](clojure/examples/1_4_vectors.clj)
  * [Функции высшего порядка](clojure/examples/1_5_functions-2.clj)
 
+Лекция 2. Внешний мир
+ * [Ввод-вывод](clojure/examples/2_1_io.clj)
+ * [Разбор и гомоиконность](clojure/examples/2_2_read.clj)
+ * [Порядки вычислений](clojure/examples/2_3_evaluation-orders.clj)
+ * [Потоки](clojure/examples/2_4_streams.clj)
+ * [Отображения и множества](clojure/examples/2_5_maps.clj)
+
 
 ## Домашнее задание 7. Обработка ошибок на JavaScript
 
@@ -72,7 +101,7 @@
         * `ArithMean` (`arith-mean`) – арифметическое среднее `(arith-mean 1 2 6)` равно 3;
         * `GeomMean` (`geom-mean`) – геометрическое среднее `(geom-mean 1 2 4)` равно 2;
         * `HarmMean` (`harm-mean`) – гармоническое среднее, `(harm-mean 2 3 6)` равно 3;
-    * [Исходный код тестов](javascript/jstest/prefix/PrefixMeansTest.java)
+    * [Исходный код тестов](javascript/jstest/prefix/PostfixMeansTest.java)
 
 
 ## Домашнее задание 6. Объектные выражения на JavaScript

@@ -28,9 +28,13 @@ public abstract strictfp class BaseTest extends Asserts {
     }
 
     public void run() {
-        System.out.println("=== Testing " + getClass().getSimpleName());
+        run(getClass());
+    }
+
+    protected void run(final Class<?> test) {
+        System.out.println("=== Testing " + test.getSimpleName());
         test();
-        counter.printStatus(getClass());
+        counter.printStatus(test);
     }
 
     protected abstract void test();

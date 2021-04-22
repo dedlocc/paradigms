@@ -23,3 +23,5 @@
 (example "Sum of squares"
          (defn sumSquares [& xs] (apply + (map square xs)))
          (sumSquares 3 4))
+(example "Sum of squares (anonymous)"
+         (#(apply + (map square %&)) 3 4))

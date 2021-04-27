@@ -80,8 +80,8 @@
 (example "Fields"
          (def _x (field :x))
          (def _y (field :y))
-         (def _dx (field :dx 0))
-         (def _dy (field :dy 0)))
+         (def _dx (field :dx))
+         (def _dy (field :dy)))
 (example "Methods"
          (def _getX (method :getX))
          (def _getY (method :getY))

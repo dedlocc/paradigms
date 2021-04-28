@@ -24,6 +24,11 @@
         * `sin` – синус, `(sin 4846147)` примерно равно 1;
         * `cos` – косинус, `(cos 5419351)` примерно равно 1.
     * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalSinCosTest.java)
+ * *SinhCosh*. (34-35) Дополнительно реализовать поддержку:
+    * унарных операций:
+        * `sinh` – гиперболический синус, `(sinh 3)` немного больше 10;
+        * `cosh` – гиперболический косинус, `(cosh 3)` немного меньше 10.
+    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalSinhCoshTest.java)
 
 
 ## Домашнее задание 8. Линейная алгебра на Clojure

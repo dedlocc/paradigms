@@ -19,6 +19,11 @@
     * Код должен находиться в файле `clojure-solutions/expression.clj`.
     * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalExpressionTest.java)
         * Запускать c аргументом `easy` или `hard`
+ * *SinCos*. (32-33) Дополнительно реализовать поддержку:
+    * унарных операций:
+        * `sin` – синус, `(sin 4846147)` примерно равно 1;
+        * `cos` – косинус, `(cos 5419351)` примерно равно 1.
+    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalSinCosTest.java)
 
 
 ## Домашнее задание 8. Линейная алгебра на Clojure

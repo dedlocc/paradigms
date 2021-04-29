@@ -29,7 +29,8 @@ public class ClojureScript {
     }
 
     public static void loadScript(final String script) {
-        System.setProperty("CLOJURE_ROOT", CLOJURE_ROOT.toString());
+        final String escaped = CLOJURE_ROOT.toString().replace("\\", "\\\\");
+        LOAD_STRING_IN.invoke("(defn load-file [file] (clojure.core/load-file (str \"" + escaped + "/\" file)))");
         LOAD_FILE.invoke(CLOJURE_ROOT.resolve(script).toString());
     }
 

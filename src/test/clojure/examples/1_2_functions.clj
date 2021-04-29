@@ -59,7 +59,6 @@
             :post [(or (== 0 b) (== 0 a) (== 0 (rem % a)))]}
            (cond
              (== 0 b) 1
-             (== 1 b) a
              (even? b) (power (* a a) (quot b 2))
              (odd? b) (* a (power a (- b 1))))))
 (example "Pre and posconditions ok"

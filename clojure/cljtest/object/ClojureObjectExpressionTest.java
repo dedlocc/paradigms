@@ -86,7 +86,7 @@ public class ClojureObjectExpressionTest extends ClojureFunctionalExpressionTest
 
     protected static void test(final String[] args, final Function<Boolean, MultiTests> multi, final Class<?> test, final Dialect parsed) {
         final boolean hard = mode(args, test);
-        new ClojureObjectExpressionTest(new Language(parsed, UNPARSED, multi.apply(hard)), hard).run(test);
+        new ClojureObjectExpressionTest(new Language(parsed, UNPARSED, multi.apply(hard)), true).run(test);
     }
 
     public static void main(final String... args) {

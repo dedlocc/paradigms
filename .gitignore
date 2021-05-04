@@ -7,3 +7,5 @@ out/
 # Temporary files
 tmp/
 
+# Clojure REPL
+.nrepl-port

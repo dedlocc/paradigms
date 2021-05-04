@@ -148,6 +148,17 @@
  * [Прототипное наследование](clojure/examples/3_1_js-objects.clj)
  * [Java-классы](clojure/examples/3_2_java-objects.clj)
 
+Лекция 4. Разное
+ * [Макросы](clojure/examples/4_1_macro.clj)
+ * [Макросы для парсеров](clojure/examples/5_4_macro.clj)
+ * [Изменяемое состояние](clojure/examples/4_2_mutable-state.clj)
+ * [Числа Чёрча](clojure/examples/4_3_church.clj)
+
+Лекция 5. Комбинаторные парсеры
+ * [Базовые функции](clojure/examples/5_1_base.clj)
+ * [Комбинаторы](clojure/examples/5_2_combinators.clj)
+ * [JSON](clojure/examples/5_3_json.clj)
+
 
 ## Домашнее задание 7. Обработка ошибок на JavaScript
 

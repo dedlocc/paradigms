@@ -27,10 +27,7 @@
          (defmacro deffield
            "Defines field"
            [name]
-           (let [key (keyword (subs (str name) 1))]
-             `(defn ~name
-                ([this#] (proto-get this# ~key))
-                ([this# def#] (proto-get this# ~key def#)))))
+           `(def ~name (field ~(keyword (subs (str name) 1)))))
          (macroexpand '(deffield _x))
          (deffield _x)
          (_x {:x 100})
@@ -39,20 +36,19 @@
 
 (example "Multiple fields"
          (defmacro deffields
-           "Defines fields"
+           "Defines multiple fields"
            [& names]
-           `(do ~(mapv (fn [name] `(deffield ~name)) names)))
+           `(do ~@(mapv (fn [name] `(deffield ~name)) names)))
          (macroexpand '(deffields _x _y))
          (deffields _x _y)
          (_x {:x 100})
-         (_y {:y 100}))
+         (_y {:y 200}))
 
 (example "Single method"
          (defmacro defmethod
            "Defines method"
            [name]
-           (let [key (keyword (subs (str name) 1))]
-             `(defn ~name [this# & args#] (apply proto-call this# ~key args#))))
+           `(def ~name (method ~(keyword (subs (str name) 1)))))
          (macroexpand '(defmethod _getX))
          (defmethod _getX)
          (_getX {:getX (fn [this] 10)})
@@ -61,51 +57,70 @@
 
 (example "Multiple methods"
          (defmacro defmethods
-           "Defines methods"
+           "Defines multiple methods"
            [& names]
-           `(do ~(mapv (fn [name] `(defmethod ~name)) names)))
+           `(do ~@(mapv (fn [name] `(defmethod ~name)) names)))
          (macroexpand '(defmethods _getX _getY))
          (defmethods _getX _getY)
          (_getX {:getX (fn [this] 10)})
          (_getY {:getY _y :y 20}))
 
 (example "Constructors"
+         (defn to-symbol [name] (symbol (str "_" name)))
          (defmacro defconstructor
            "Defines constructor"
-           [name ctor prototype]
-           `(defn ~name [& args#] (apply ~ctor {:prototype ~prototype} args#)))
-         (macroexpand '(defconstructor _Point Point PointPrototype)))
+           [name fields prototype]
+           `(do
+              (deffields ~@(map to-symbol fields))
+              (defn ~name ~fields
+                (assoc {:prototype ~prototype}
+                  ~@(mapcat (fn [f] [(keyword f) f]) fields)))))
+         (macroexpand '(defconstructor Point [x y] PointPrototype)))
+
+(example "Classes"
+         (defmacro defclass
+           "Defines class"
+           [name super fields & methods]
+           (let [-name (fn [suffix] (fn [class] (symbol (str class "_" suffix))))
+                 proto-name (-name "proto")
+                 fields-name (-name "fields")
+                 method (fn [[name args body]] [(keyword name) `(fn ~(apply vector 'this args) ~body)])
+                 base-proto (if (= '_ super) {} {:prototype (proto-name super)})
+                 prototype (reduce (fn [m nab] (apply assoc m (method nab))) base-proto methods)
+                 public-prototype (proto-name name)
+                 public-fields (fields-name name)
+                 all-fields (vec (concat (if (= '_ super) [] (eval (fields-name super))) fields))]
+             `(do
+                (defmethods ~@(map (comp to-symbol first) methods))
+                (deffields ~@(map to-symbol fields))
+                (def ~public-prototype ~prototype)
+                (def ~public-fields (quote ~all-fields))
+                (defconstructor ~name ~all-fields ~public-prototype))))
+         (macroexpand '(defclass Point _ [x y]
+                                 (getX [] (_x this))
+                                 (getY [] (_y this))
+                                 (setX [x] (assoc this :x x))
+                                 (setY [y] (assoc this :y y)))))
 
 (example "Point"
-         (deffields _x _y)
-         (defmethods _getX _getY _sub _length _distance)
-         (def _Point)
-         (def PointPrototype
-           {:getX (fn [this] (_x this))
-            :getY _y
-            :sub (fn [this that] (_Point (- (_getX this) (_getX that))
-                                         (- (_getY this) (_getY that))))
-            :length (fn [this] (let [square #(* % %)] (Math/sqrt (+ (square (_getX this)) (square (_getY this))))))
-            :distance (fn [this that] (_length (_sub this that)))
-            })
-         (defn Point [this x y]
-           (assoc this
-             :x x
-             :y y))
-         (defconstructor _Point Point PointPrototype)
-         (_length (_Point 3 4))
-         (_distance (_Point 5 5) (_Point 1 2)))
+         (defclass Point _ [x y]
+                   (getX [] (_x this))
+                   (getY [] (_y this))
+                   (setX [x] (assoc this :x x))
+                   (setY [y] (assoc this :y y))
+                   (sub [that] (Point (- (_getX this) (_getX that))
+                                      (- (_getY this) (_getY that))))
+                   (length [] (let [square #(* % %)] (Math/sqrt (+ (square (_getX this)) (square (_getY this))))))
+                   (distance [that] (_length (_sub this that))))
+         (_length (Point 3 4))
+         (_distance (Point 5 5) (Point 1 2))
+         (_getX (_setX (Point 3 4) 100)))
 
 (example "Shifted point"
-         (deffields _dx _dy)
-         (def ShiftedPointPrototype
-           (assoc PointPrototype
-             :getX (fn [this] (+ (_x this) (_dx this)))
-             :getY (fn [this] (+ (_y this) (_dy this)))))
-         (defn ShiftedPoint [this x y dx dy]
-           (assoc (Point this x y)
-             :dx dx
-             :dy dy
-             ))
-         (defconstructor _ShiftedPoint ShiftedPoint ShiftedPointPrototype)
-         (_distance (_ShiftedPoint 2 2 3 3) (_Point 1 2)))
+         (defclass ShiftedPoint Point [dx dy]
+                   (getX [] (+ (_x this) (_dx this)))
+                   (getY [] (+ (_y this) (_dy this)))
+                   (setDX [dx] (assoc this :dx dx))
+                   (setDY [dy] (assoc this :dy dy)))
+         (_distance (ShiftedPoint 2 2 3 3) (Point 1 2))
+         (_getX (_setX (ShiftedPoint 10 20 1 2) 100)))

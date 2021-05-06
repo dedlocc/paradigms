@@ -8,8 +8,8 @@ import jstest.Language;
  */
 public class FunctionalOneTwoTest extends FunctionalExpressionTest {
     public static class OneTwoTests extends ArithmeticTests {
-        protected final AbstractExpression one = constant(1, "one");
-        protected final AbstractExpression two = constant(2, "two");
+        protected final TestExpression one = constant(1, "one");
+        protected final TestExpression two = constant(2, "two");
 
         {
             tests(
@@ -20,8 +20,8 @@ public class FunctionalOneTwoTest extends FunctionalExpressionTest {
             );
         }
 
-        private AbstractExpression constant(final double value, final String name) {
-            final TExpr expr = vars -> value;
+        private TestExpression constant(final double value, final String name) {
+            final Func expr = vars -> value;
             nullary(name, expr);
             return (parsed, unparsed) -> expr(name, name, expr);
        }

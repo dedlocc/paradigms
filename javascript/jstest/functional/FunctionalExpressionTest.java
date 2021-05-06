@@ -53,7 +53,7 @@ public class FunctionalExpressionTest extends BaseJavascriptTest<Engine> {
 
     public static void main(final String... args) {
         test(args, FunctionalExpressionTest.class, FunctionalExpressionTest::new, new AbstractTests() {
-            protected final AbstractExpression vx = variable("x", 0);
+            protected final TestExpression vx = variable("x", 0);
 
             {
                 //noinspection Convert2MethodRef

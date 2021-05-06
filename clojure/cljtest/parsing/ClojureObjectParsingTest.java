@@ -2,12 +2,15 @@ package cljtest.parsing;
 
 import cljtest.ClojureScript;
 import cljtest.object.ClojureObjectExpressionTest;
-import jstest.*;
+import jstest.ArithmeticTests;
+import jstest.Engine;
+import jstest.Language;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.DoubleBinaryOperator;
 import java.util.function.IntPredicate;
 
 /**
@@ -36,19 +39,13 @@ public class ClojureObjectParsingTest extends ClojureObjectExpressionTest {
 
     private final boolean hard;
     private final Set<String> vars = new HashSet<>(Set.of("x", "y", "z"));
-    protected final Map<String, Integer> priorities = new HashMap<>(Map.of(
-            "+", 100, "-", 100,
-            "*", 200, "/", 200
-    ));
+    private final Map<String, Integer> priorities;
 
-    protected ClojureObjectParsingTest(final AbstractTests tests, final boolean hard) {
-        super(new Language(PARSED, hard ? INFIX : SUFFIX, tests), false);
+    private ClojureObjectParsingTest(final Dialect parsed, final PriorityTests tests, final boolean hard) {
+        super(new Language(parsed, hard ? INFIX : SUFFIX, tests), false);
         vars.addAll(tests.getVariableNames().keySet());
+        priorities = tests.priorities;
         this.hard = hard;
-    }
-
-    protected ClojureObjectParsingTest(final boolean hard) {
-        this(new BinaryTests(), hard);
     }
 
     protected void testToString(final String expression, final String expected) {
@@ -71,7 +68,11 @@ public class ClojureObjectParsingTest extends ClojureObjectExpressionTest {
     }
 
     public static void main(final String... args) {
-        new ClojureObjectParsingTest(mode(args, ClojureObjectParsingTest.class)).run();
+        test(args, new PriorityTests(), ClojureObjectParsingTest.class, PARSED);
+    }
+
+    protected static void test(final String[] args, final PriorityTests tests, final Class<?> test, final Dialect parsed) {
+        new ClojureObjectParsingTest(parsed, tests, mode(args, test)).run(test);
     }
 
     interface Parsed {
@@ -172,12 +173,24 @@ public class ClojureObjectParsingTest extends ClojureObjectExpressionTest {
         }
     }
 
-    static class BinaryTests extends VariablesTests {{
-        binary("+", (a, b) -> a + b);
-        binary("-", (a, b) -> a - b);
-        binary("*", (a, b) -> a * b);
-        binary("/", (a, b) -> a / b);
-        unary("negate", a -> -a);
-        tests.addAll(new ArithmeticTests().tests);
-    }}
+    protected static class PriorityTests extends ArithmeticTests {
+        private final Map<String, Integer> priorities = new HashMap<>(Map.of(
+                "+", 100, "-", 100,
+                "*", 200, "/", 200
+        ));
+
+        protected void binary(final String name, final int priority, final DoubleBinaryOperator answer) {
+            binary(name, answer);
+            priorities.put(name, priority);
+
+            tests(
+                    f(name, vx, vy),
+                    f(name, vx, f("negate", vy)),
+                    f(name, f("negate", vx), vy),
+                    f(name, f("negate", vx), f("negate", vy)),
+                    f(name, vx, f("-", c(1), vy)),
+                    f(name, f("-", vx, c(2)), vy)
+            );
+        }
+    }
 }

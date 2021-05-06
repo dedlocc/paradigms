@@ -1,7 +1,7 @@
 package cljtest.multi;
 
-import java.util.List;
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.stream.DoubleStream;
 
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
@@ -9,30 +9,17 @@ import java.util.stream.Stream;
 public class MultiMeanVarnTests extends MultiTests {
     public MultiMeanVarnTests(final boolean testMulti) {
         super(testMulti);
-        final int arity = testMulti ? -1 : 2;
-        any("mean", arity, args -> mean(args.stream()));
-        any("varn", arity, MultiMeanVarnTests::varn);
-        tests(
-                f("mean", vx, vy),
-                f("varn", vx, vy),
-                f("mean", vx, c(3)),
-                f("varn", vx, c(3)),
-                f("varn", vx, f("mean", vy, vz)),
-                f("mean", vx, f("varn", vy, vz)),
-                f("/", vz, f("varn", vx, vy)),
-                f("+", f("mean", f("+", vx, c(10)), f("*", vz, f("*", vy, c(0)))), c(2))
-        );
 
-        randomMulti(testMulti, "mean", "varn");
+        any("mean", 1, args -> mean(Arrays.stream(args)));
+        any("varn", 1, MultiMeanVarnTests::varn);
     }
 
-    private static double varn(final List<Double> args) {
-        final double mean = mean(args.stream());
-        return mean(args.stream().map(a -> a - mean).map(a -> a * a));
+    private static double varn(final double[] args) {
+        final double mean = mean(Arrays.stream(args));
+        return mean(Arrays.stream(args).map(a -> a - mean).map(a -> a * a));
     }
 
-    private static double mean(final Stream<Double> args) {
-        //noinspection OptionalGetWithoutIsPresent
-        return args.mapToDouble(Double::doubleValue).average().getAsDouble();
+    private static double mean(final DoubleStream args) {
+        return args.average().orElseThrow();
     }
 }

@@ -2,8 +2,6 @@ package jstest.functional;
 
 import jstest.Language;
 
-import java.util.List;
-
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
@@ -14,8 +12,9 @@ public class FunctionalOneFPTest extends FunctionalOneTwoTest {
             .rename("^", "ceil");
 
     public static class FPTests extends OneTwoTests {{
-        any("*+", 3, FunctionalOneFPTest::madd);
-        any("madd", 3, FunctionalOneFPTest::madd);
+        final Func madd = args -> args[0] * args[1] + args[2];
+        fixed("*+", 3, madd);
+        fixed("madd", 3, madd);
         unary("_", Math::floor);
         unary("floor", Math::floor);
         unary("^", Math::ceil);
@@ -30,10 +29,6 @@ public class FunctionalOneFPTest extends FunctionalOneTwoTest {
                 f("ceil", f("-", vx, f("/", vy, c(3))))
         );
     }}
-
-    private static double madd(final List<Double> args) {
-        return args.get(0) * args.get(1) + args.get(2);
-    }
 
     protected FunctionalOneFPTest(final Language language, final boolean testParsing) {
         super(language, testParsing);

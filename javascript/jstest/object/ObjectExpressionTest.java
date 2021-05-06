@@ -56,20 +56,20 @@ public class ObjectExpressionTest extends BaseJavascriptTest<JSEngine> {
         super.test();
 
         if (testDiff) {
-            for (final Expr<TExpr> test : language.tests) {
+            for (final Expr test : language.tests) {
                 testDiff(test, test.parsed, null);
                 testDiff(test, parse(test.unparsed), null);
             }
             if (testSimplify) {
                 for (int i = 0; i < simplifications.size(); i++) {
-                    final Expr<TExpr> test = language.tests.get(i);
+                    final Expr test = language.tests.get(i);
                     testDiff(test, parse(test.unparsed), simplifications.get(i));
                 }
             }
         }
     }
 
-    private void testDiff(final Expr<TExpr> test, final String expression, final int[] simplifications) {
+    private void testDiff(final Expr test, final String expression, final int[] simplifications) {
 //        final int[] actual = new int[3];
         for (int variable = 0; variable < 3; variable++) {
             final String diff = expression + ".diff('" + "xyz".charAt(variable) + "')";
@@ -98,10 +98,10 @@ public class ObjectExpressionTest extends BaseJavascriptTest<JSEngine> {
             for (int i = MIN; i <= N; i += 1) {
                 for (int j = MIN; j <= N; j += 1) {
                     for (int k = MIN; k <= N; k += 1) {
-                        if (Double.isFinite(test.answer.evaluate(i, j, k))) {
+                        if (Double.isFinite(test.answer.applyAsDouble(i, j, k))) {
                             final double expected = (
-                                    test.answer.evaluate(i + di, j + dj, k + dk) -
-                                            test.answer.evaluate(i - di, j - dj, k - dk)) / D / 2;
+                                    test.answer.applyAsDouble(i + di, j + dj, k + dk) -
+                                    test.answer.applyAsDouble(i - di, j - dj, k - dk)) / D / 2;
                             evaluate(new double[]{i, j, k}, expected, EPS);
                         }
                     }

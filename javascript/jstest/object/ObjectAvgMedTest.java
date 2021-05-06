@@ -3,6 +3,8 @@ package jstest.object;
 import jstest.ArithmeticTests;
 import jstest.Language;
 
+import java.util.Arrays;
+
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
@@ -12,8 +14,8 @@ public class ObjectAvgMedTest extends ObjectExpressionTest {
             .rename("avg5", "Avg5");
 
     public static class AvgMedTests extends ArithmeticTests {{
-        any("avg5", 5, args -> args.stream().mapToDouble(a -> a).summaryStatistics().getAverage());
-        any("med3", 3, args -> args.stream().mapToDouble(a -> a).sorted().skip(1).findFirst().orElse(0));
+        fixed("avg5", 5, args -> Arrays.stream(args).summaryStatistics().getAverage());
+        fixed("med3", 3, args -> Arrays.stream(args).sorted().skip(1).findFirst().orElseThrow());
         tests(
                 f("med3", vx, vy, vz),
                 f("avg5", vx, vy, vz, c(7), f("*", vy, vz)),

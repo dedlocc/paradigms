@@ -2,15 +2,15 @@ package jstest.functional;
 
 import jstest.Language;
 
-import java.util.Comparator;
+import java.util.Arrays;
 
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class FunctionalOneMinMaxTest extends FunctionalOneTwoTest {
     public static class MinMaxTests extends OneTwoTests {{
-        any("min5", 5, args -> args.stream().min(Comparator.naturalOrder()).orElse(0.0));
-        any("max3", 3, args -> args.stream().max(Comparator.naturalOrder()).orElse(0.0));
+        fixed("min5", 5, args -> Arrays.stream(args).min().orElseThrow());
+        fixed("max3", 3, args -> Arrays.stream(args).max().orElseThrow());
         tests(
                 f("min5", vx, vy, vz, one, two),
                 f("max3", vx, vy, vz)

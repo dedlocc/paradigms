@@ -4,16 +4,12 @@ import jstest.ArithmeticTests;
 import jstest.Language;
 import jstest.object.ObjectExpressionTest;
 
-import java.util.List;
-import java.util.Random;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
+import java.util.Arrays;
 
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class PrefixSumsqLengthTest extends PrefixParsingErrorTest {
-    private static final Random RANDOM = new Random(343243543059325L);
     public static final Dialect SUMSQ_LENGTH_DIALECT = ObjectExpressionTest.ARITHMETIC_DIALECT.copy()
             .rename("sumsq", "Sumsq")
             .rename("length", "Length");
@@ -39,23 +35,14 @@ public class PrefixSumsqLengthTest extends PrefixParsingErrorTest {
                 f("length"),
                 f("length", f("negate", vz), f("length", vx, vy))
         );
-        final Supplier<AbstractExpression> generator = () -> random(vx, vy, vz, c(RANDOM.nextInt(10)));
         for (int i = 1; i < 10; i++) {
-            final AbstractExpression[] args = Stream.generate(generator).limit(i).toArray(AbstractExpression[]::new);
-            tests(
-                    f("sumsq", args),
-                    f("length", args)
-            );
+            final TestExpression[] args = randomArgs(i);
+            tests(f("sumsq", args), f("length", args));
         }
     }}
 
-    private static double sumsq(final List<Double> args) {
-        return args.stream().mapToDouble(a -> a * a).sum();
-    }
-
-    @SafeVarargs
-    private static <T> T random(final T... values) {
-        return values[RANDOM.nextInt(values.length)];
+    private static double sumsq(final double[] args) {
+        return Arrays.stream(args).map(a -> a * a).sum();
     }
 
     protected PrefixSumsqLengthTest(final int mode, final Language language, final String toString) {

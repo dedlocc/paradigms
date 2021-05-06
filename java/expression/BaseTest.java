@@ -9,7 +9,7 @@ import java.util.*;
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public abstract strictfp class BaseTest extends Asserts {
-    protected final Random random = new Random(4375084350841L);
+    protected final Random random = new Random(4375084350842L);
 
     protected final TestCounter counter = new TestCounter();
 

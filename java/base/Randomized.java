@@ -6,45 +6,45 @@ import java.util.Random;
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-public class Randomized {
-    public static final String ENGLISH = "abcdefghijklmnopqrstuvwxyz";
+public interface Randomized {
+    String ENGLISH = "abcdefghijklmnopqrstuvwxyz";
 
-    public final Random random = new Random(8045702385702345702L);
-
-    public String randomString(final String chars) {
-        return randomChar(chars) + (random.nextBoolean() ? "" : randomString(chars));
+    static Random initRandom(final long seed, final Class<?> owner) {
+        return new Random(seed + owner.getName().hashCode());
     }
 
-    public char randomChar(final String chars) {
-        return chars.charAt(random.nextInt(chars.length()));
+    Random getRandom();
+
+    default int randomInt(final int bound) {
+        return getRandom().nextInt(bound);
     }
 
-    public String randomString(final String chars, final int length) {
-        final StringBuilder string = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            string.append(randomChar(chars));
-        }
-        return string.toString();
+    default int randomInt(final int min, final int max) {
+        return getRandom().nextInt(max - min + 1) + min;
     }
 
-    public String randomString(final String chars, final int minLength, int maxLength) {
-        return randomString(chars, randomInt(minLength, maxLength + 1));
+    default long randomLong(final long max) {
+        return getRandom().nextLong() % max;
     }
 
-    public int randomInt(final int min, final int max) {
-        return random.nextInt(max - min) + min;
+    default String randomString(final String chars) {
+        return randomChar(chars) + (randomBoolean() ? "" : randomString(chars));
     }
 
-    @SafeVarargs
-    public final <T> T randomItem(final T... items) {
-        return items[random.nextInt(items.length)];
+    default boolean randomBoolean() {
+        return getRandom().nextBoolean();
     }
 
-    public final <T> T randomItem(final List<T> items) {
-        return items.get(random.nextInt(items.size()));
+    default char randomChar(final String chars) {
+        return chars.charAt(getRandom().nextInt(chars.length()));
     }
 
-    public Random getRandom() {
-        return random;
+    @SuppressWarnings("unchecked")
+    default <T> T randomItem(final T... items) {
+        return items[getRandom().nextInt(items.length)];
+    }
+
+    default <T> T randomItem(final List<T> items) {
+        return items.get(getRandom().nextInt(items.size()));
     }
 }

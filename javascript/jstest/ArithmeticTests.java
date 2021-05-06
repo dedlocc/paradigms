@@ -1,18 +1,27 @@
 package jstest;
 
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class ArithmeticTests extends VariablesTests {
+    private final Supplier<TestExpression> randomArg = () -> randomItem(vx, vy, vz, c(randomInt(10)), c(randomInt(10)));
+
     public ArithmeticTests() {
         addTests(vx, vy, vz);
     }
 
-    public ArithmeticTests(final AbstractExpression vx, final AbstractExpression vy, final AbstractExpression vz) {
+    public ArithmeticTests(final TestExpression vx, final TestExpression vy, final TestExpression vz) {
         addTests(vx, vy, vz);
     }
 
-    private void addTests(final AbstractExpression vx, final AbstractExpression vy, final AbstractExpression vz) {
+    protected TestExpression[] randomArgs(final int i) {
+        return Stream.generate(randomArg).limit(i).toArray(TestExpression[]::new);
+    }
+
+    private void addTests(final TestExpression vx, final TestExpression vy, final TestExpression vz) {
         //noinspection Convert2MethodRef
         binary("+", (a, b) -> a + b);
         binary("-", (a, b) -> a - b);

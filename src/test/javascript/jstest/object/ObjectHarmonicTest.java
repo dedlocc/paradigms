@@ -16,12 +16,12 @@ public class ObjectHarmonicTest extends ObjectExpressionTest {
     public static class HypotHmeanTests extends ArithmeticTests {{
         binary("hypot", (a, b) -> a * a + b * b);
         binary("hmean", (a, b) -> 2 / (1 / a + 1 / b));
-        final AbstractExpression hypot = f(
+        final TestExpression hypot = f(
                 "hypot",
                 c(2),
                 f("+", c(1), f("*", c(2), f("-", vy, vz)))
         );
-        final AbstractExpression hmean = f(
+        final TestExpression hmean = f(
                 "hmean",
                 f("+", c(2), f("*", c(4), f("-", vx, vz))),
                 f("+", c(1), f("*", c(2), f("-", vy, vz)))

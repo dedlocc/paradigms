@@ -47,10 +47,9 @@ public class Asserts {
     public static boolean isEqual(final double precision, final double expected, final double actual) {
         return Math.abs(actual - expected) < precision
                 || Math.abs(actual - expected) < precision * Math.abs(expected)
-                || (Double.isNaN(actual) || Double.isInfinite(actual)) &&
-                (Double.isNaN(expected) || Double.isInfinite(expected))
-                || (Double.isNaN(expected) && actual == 0)
-                || (Math.abs(expected) < precision && Double.isNaN(actual));
+                || !Double.isFinite(expected)
+                || Math.abs(expected) > 1e100
+                || Math.abs(expected) < precision && !Double.isFinite(actual);
     }
 
     public static void checkAssert(final Class<?> c) {

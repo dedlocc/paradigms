@@ -1,7 +1,10 @@
 package jstest.prefix;
 
 import expression.BaseTest;
-import jstest.*;
+import jstest.AbstractTests;
+import jstest.ArithmeticTests;
+import jstest.EngineException;
+import jstest.Language;
 import jstest.object.ObjectExpressionTest;
 
 /**

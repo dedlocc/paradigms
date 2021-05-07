@@ -3,7 +3,8 @@ package jstest;
 import expression.BaseTest;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.ToDoubleFunction;
 
 /**
  * @author Niyaz Nigmatullin
@@ -11,7 +12,7 @@ import java.util.function.*;
  */
 public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
     public static final int N = 5;
-    public static final double EPS = 1e-5;
+    public static final double EPS = 1e-4;
 
     protected final E engine;
     protected final Language language;
@@ -25,7 +26,7 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
     }
 
     private static boolean safe(final char ch) {
-        return !Character.isLetterOrDigit(ch) && "+-*/.<>=".indexOf(ch) == -1;
+        return !Character.isLetterOrDigit(ch) && "+-*/.<>=&|^".indexOf(ch) == -1;
     }
 
     protected static String addSpaces(final String expression, final Random random) {
@@ -44,7 +45,7 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
 
     @Override
     protected void test() {
-        for (final Expr<TExpr> test : language.tests) {
+        for (final Expr test : language.tests) {
             test(test.parsed, test.answer, test.unparsed);
             if (testParsing) {
                 test(parse(test.unparsed), test.answer, test.unparsed);
@@ -57,7 +58,7 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
 
     protected abstract String parse(final String expression);
 
-    protected void test(final String expression, final TExpr f, final String unparsed) {
+    protected void test(final String expression, final Func f, final String unparsed) {
         System.out.println("Testing: " + expression);
 
         engine.parse(expression);
@@ -65,7 +66,7 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
             for (double j = 0; j <= N; j += 1) {
                 for (double k = 0; k <= N; k += 1) {
                     final double[] vars = new double[]{i, j, k};
-                    evaluate(vars, f.evaluate(vars), EPS);
+                    evaluate(vars, f.applyAsDouble(vars), EPS);
                 }
             }
         }
@@ -80,12 +81,12 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
         System.out.println("Testing random tests");
         for (int i = 0; i < n; i++) {
             if (i % 100 == 0) {
-                System.out.println("    Completed " + i + " out of " + n);
+                System.out.printf("    Completed %3d out of %d%n", i, n);
             }
             final double[] vars = random.doubles().limit(language.abstractTests.getVariables().size()).toArray();
 
-            final Expr<TExpr> test = language.randomTest(random, i);
-            final double answer = test.answer.evaluate(vars);
+            final Expr test = language.randomTest(i);
+            final double answer = test.answer.applyAsDouble(vars);
 
             engine.parse(test.parsed);
             evaluate(vars, answer, EPS);
@@ -129,13 +130,9 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
         return -1;
     }
 
-    public interface TExpr {
-        double evaluate(double... vars);
-    }
-
-    public interface Operator<T> {
-        T apply(List<T> args);
-        int getArity(Random random);
+    public interface Func extends ToDoubleFunction<double[]> {
+        @Override
+        double applyAsDouble(double... args);
     }
 
     public static class Dialect {
@@ -181,12 +178,12 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
         }
     }
 
-    public static class Expr<T> {
+    public static class Expr {
         public final String parsed;
         public final String unparsed;
-        public final T answer;
+        public final Func answer;
 
-        protected Expr(final String parsed, final String unparsed, final T answer) {
+        protected Expr(final String parsed, final String unparsed, final Func answer) {
             this.parsed = Objects.requireNonNull(parsed);
             this.unparsed = Objects.requireNonNull(unparsed);
             this.answer = answer;

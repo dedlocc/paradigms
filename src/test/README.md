@@ -3,6 +3,15 @@
 [Условия домашних заданий](http://www.kgeorgiy.info/courses/paradigms/homeworks.html)
 
 
+## Домашнее задание 11. Комбинаторные парсеры
+
+Модификации
+ * *Базовая*
+    * Код должен находиться в файле `clojure-solutions/expression.clj`.
+    * [Исходный код тестов](clojure/cljtest/parsing/ClojureObjectParsingTest.java)
+        * Запускать c аргументом `easy` или `hard`
+
+
 ## Домашнее задание 10. Объектные выражения на Clojure
 
 Модификации
@@ -10,6 +19,21 @@
     * Код должен находиться в файле `clojure-solutions/expression.clj`.
     * [Исходный код тестов](clojure/cljtest/object/ClojureObjectExpressionTest.java)
         * Запускать c аргументом `easy` или `hard`
+ * *SinCos*. (32-33) Дополнительно реализовать поддержку:
+    * унарных операций:
+        * `Sin` (`sin`) – синус, `(sin 4846147)` примерно равно 1;
+        * `Cos` (`cos`) – косинус, `(cos 5419351)` примерно равно 1.
+    * [Исходный код тестов](clojure/cljtest/object/ClojureObjectSinCosTest.java)
+ * *SinhCosh*. (34-35) Дополнительно реализовать поддержку:
+    * унарных операций:
+        * `Sinh` (`sinh`) – гиперболический синус, `(sinh 3)` немного больше 10;
+        * `Cosh` (`cosh`) – гиперболический косинус, `(cosh 3)` немного меньше 10.
+    * [Исходный код тестов](clojure/cljtest/object/ClojureObjectSinhCoshTest.java)
+ * *SumAvg*. (36-37) Дополнительно реализовать поддержку:
+    * операций произвольного числа аргументов:
+        * `sum` – сумма, `(sum 1 2 3)` равно 6;
+        * `avg` – среднее, `(avg 1 2 3)` равно 2;
+    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalSumAvgTest.java)
 
 
 ## Домашнее задание 9. Функциональные выражения на Clojure
@@ -29,11 +53,16 @@
         * `sinh` – гиперболический синус, `(sinh 3)` немного больше 10;
         * `cosh` – гиперболический косинус, `(cosh 3)` немного меньше 10.
     * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalSinhCoshTest.java)
- * *SumAvg*. Дополнительно реализовать поддержку:
+ * *SumAvg*. (36-37) Дополнительно реализовать поддержку:
     * операций произвольного числа аргументов:
         * `sum` – сумма, `(sum 1 2 3)` равно 6;
         * `avg` – среднее, `(avg 1 2 3)` равно 2;
     * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalSumAvgTest.java)
+ * *MeanVarn* (38-39). Дополнительно реализовать поддержку:
+    * операций произвольного числа аргументов:
+        * `mean` – математическое ожидание аргументов, `(mean 1 2 6)` равно 3;
+        * `varn` – дисперсия аргументов, `(varn 2 5 11)` равно 14;
+    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalMeanVarnTest.java)
 
 
 ## Домашнее задание 8. Линейная алгебра на Clojure
@@ -133,6 +162,17 @@
 Лекция 3. Объекты
  * [Прототипное наследование](clojure/examples/3_1_js-objects.clj)
  * [Java-классы](clojure/examples/3_2_java-objects.clj)
+
+Лекция 4. Разное
+ * [Макросы](clojure/examples/4_1_macro.clj)
+ * [Макросы для парсеров](clojure/examples/5_4_macro.clj)
+ * [Изменяемое состояние](clojure/examples/4_2_mutable-state.clj)
+ * [Числа Чёрча](clojure/examples/4_3_church.clj)
+
+Лекция 5. Комбинаторные парсеры
+ * [Базовые функции](clojure/examples/5_1_base.clj)
+ * [Комбинаторы](clojure/examples/5_2_combinators.clj)
+ * [JSON](clojure/examples/5_3_json.clj)
 
 
 ## Домашнее задание 7. Обработка ошибок на JavaScript

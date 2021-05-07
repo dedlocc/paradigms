@@ -14,7 +14,7 @@ public class FunctionalMiniTest extends FunctionalExpressionTest {
 
     public static void main(final String... args) {
         test(args, FunctionalMiniTest.class, FunctionalMiniTest::new, new AbstractTests() {
-            protected final AbstractExpression vx = variable("x", 0);
+            protected final TestExpression vx = variable("x", 0);
             {
                 tests(c(10), vx);
             }

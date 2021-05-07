@@ -31,9 +31,9 @@
     * [Исходный код тестов](clojure/cljtest/object/ClojureObjectSinhCoshTest.java)
  * *SumAvg*. (36-37) Дополнительно реализовать поддержку:
     * операций произвольного числа аргументов:
-        * `sum` – сумма, `(sum 1 2 3)` равно 6;
-        * `avg` – среднее, `(avg 1 2 3)` равно 2;
-    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalSumAvgTest.java)
+        * `Sum` (`sum`) – сумма, `(sum 1 2 3)` равно 6;
+        * `Avg` (`avg`) – арифметическое среднее, `(avg 1 2 3)` равно 2;
+    * [Исходный код тестов](clojure/cljtest/object/ClojureObjectSumAvgTest.java)
 
 
 ## Домашнее задание 9. Функциональные выражения на Clojure

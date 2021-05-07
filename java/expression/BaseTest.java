@@ -1,6 +1,7 @@
 package expression;
 
 import base.Asserts;
+import base.Randomized;
 import base.TestCounter;
 
 import java.util.*;
@@ -8,8 +9,8 @@ import java.util.*;
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-public abstract strictfp class BaseTest extends Asserts {
-    protected final Random random = new Random(4375084350842L);
+public abstract strictfp class BaseTest extends Asserts implements Randomized {
+    protected final Random random = Randomized.initRandom(4375084350844354352L, getClass());
 
     protected final TestCounter counter = new TestCounter();
 
@@ -21,10 +22,6 @@ public abstract strictfp class BaseTest extends Asserts {
 
     protected <T> T random(final List<T> variants) {
         return variants.get(random.nextInt(variants.size()));
-    }
-
-    protected int randomInt(final int n) {
-        return random.nextInt(n);
     }
 
     public void run() {
@@ -48,6 +45,10 @@ public abstract strictfp class BaseTest extends Asserts {
         for (int i = -d; i <= d; i++) {
             values.add(c + i);
         }
+    }
+
+    public Random getRandom() {
+        return random;
     }
 
     public static final class Op<T> {

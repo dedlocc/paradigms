@@ -46,7 +46,6 @@
   (let [s (apply * ss)]
     (mapv #(* % s) v)))
 
-
 (def m? #(same-form? % v?))
 (def m-op (op m?))
 
@@ -62,7 +61,7 @@
 (defn m*s [m & ss]
   {:pre [(m? m) (every? number? ss)]}
   (let [s (apply * ss)]
-    (mapv #(apply v*s % s) m)))
+    (mapv #(v*s % s) m)))
 
 (defn m*v [m v]
   {:pre [(m? m) (v? v)]}
@@ -90,7 +89,6 @@
 
 (defn x? [x]
   (or
-    (number? x)
     (v? x)
     (and
       (vector-of? (every-pred vector? x?) x)

@@ -104,6 +104,27 @@ inc(N, R) :- number(R), !, N is R - 1.
    R / [9,19,29]
 */
 
+filter([], _, []).
+filter([H | T], P, [H | RT]) :- G =.. [P, H], call(G), !, filter(T, P, RT).
+filter([H | T], P, RT) :- filter(T, P, RT).
+
+odd(N) :- 1 is mod(N, 2).
+
+/*
+?- filter([1, 2, 3], odd, R).
+   R / [1,2,3]
+*/
+
+foldLeft([], Z, _, Z).
+foldLeft([H | T], Z, F, R) :- G =.. [F, Z, H, RH], call(G), foldLeft(T, RH, F, R).
+
+add(A, B, R) :- R is A + B.
+
+/*
+?- foldLeft([1, 2, 3], 0, add, R).
+   R / 6
+*/
+
 
 % Matrix transposition
 
@@ -118,7 +139,8 @@ tail([_ | T], T).
    R / [[1,3],[2,4]]
 */
 
-/** Zip lists. */
+% Zip lists
+
 zip([], _, []) :- !.
 zip(_, [], []) :- !.
 zip([H1 | T1], [H2 | T2], [(H1, H2) | RT]) :- zip(T1, T2, RT).

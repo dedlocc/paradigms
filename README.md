@@ -2,6 +2,24 @@
 
 [Условия домашних заданий](http://www.kgeorgiy.info/courses/paradigms/homeworks.html)
 
+## Домашнее задание X. Простые числа на Prolog
+
+Модификации
+ * *Базовая*
+    * Код должен находиться в файле `prolog-solutions/primes.pl`.
+    * [Исходный код тестов](prolog/prtest/primes/PrologPrimesTest.java)
+        * Запускать c аргументом `easy`, `hard` или `bonus`
+
+Для запуска тестов можно использовать скрипты
+[TestProlog.cmd](prolog/TestProlog.cmd) и [TestProlog.sh](prolog/TestProlog.sh)
+ * Репозиторий должен быть скачан целиком.
+ * Скрипты должны находиться в каталоге `prolog`
+    (их нельзя перемещать, но можно вызывать из других каталогов).
+ * Полное имя класса теста указывается в качестве первого аргумента командной строки,
+    например, `prtest.primes.PrologPrimesTest`.
+ * Тестируемое решение должно находиться в текущем каталоге.
+
+
 ## Исходный код к лекциям по Prolog
 
 Запуск Prolog
@@ -12,7 +30,6 @@
  * [Учебный план](prolog/examples/1_1_plan.pl)
  * [Вычисления](prolog/examples/1_2_calc.pl)
  * [Списки](prolog/examples/1_3_lists.pl)
- * [Задача о расстановке ферзей](prolog/examples/1_4_queens.pl)
 
 
 ## Домашнее задание 11. Комбинаторные парсеры

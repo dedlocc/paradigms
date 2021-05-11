@@ -41,7 +41,7 @@ public class ClojureObjectParsingTest extends ClojureObjectExpressionTest {
     private final Set<String> vars = new HashSet<>(Set.of("x", "y", "z"));
     private final Map<String, Integer> priorities;
 
-    private ClojureObjectParsingTest(final Dialect parsed, final PriorityTests tests, final boolean hard) {
+    private ClojureObjectParsingTest(final Dialect parsed, final Tests tests, final boolean hard) {
         super(new Language(parsed, hard ? INFIX : SUFFIX, tests), false);
         vars.addAll(tests.getVariableNames().keySet());
         priorities = tests.priorities;
@@ -68,10 +68,10 @@ public class ClojureObjectParsingTest extends ClojureObjectExpressionTest {
     }
 
     public static void main(final String... args) {
-        test(args, new PriorityTests(), ClojureObjectParsingTest.class, PARSED);
+        test(args, new Tests(), ClojureObjectParsingTest.class, PARSED);
     }
 
-    protected static void test(final String[] args, final PriorityTests tests, final Class<?> test, final Dialect parsed) {
+    protected static void test(final String[] args, final Tests tests, final Class<?> test, final Dialect parsed) {
         new ClojureObjectParsingTest(parsed, tests, mode(args, test)).run(test);
     }
 
@@ -173,7 +173,7 @@ public class ClojureObjectParsingTest extends ClojureObjectExpressionTest {
         }
     }
 
-    protected static class PriorityTests extends ArithmeticTests {
+    protected static class Tests extends ArithmeticTests {
         private final Map<String, Integer> priorities = new HashMap<>(Map.of(
                 "+", 100, "-", 100,
                 "*", 200, "/", 200

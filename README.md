@@ -40,6 +40,10 @@
     * Код должен находиться в файле `clojure-solutions/expression.clj`.
     * [Исходный код тестов](clojure/cljtest/parsing/ClojureObjectParsingTest.java)
         * Запускать c аргументом `easy` или `hard`
+ * *Variables* (32-33). Дополнительно реализовать поддержку:
+    * Переменных, состоящих из произвольного количества букв `XYZ` в любом регистре
+        * Настоящее имя переменной определяется первой буквой ее имени
+    * [Исходный код тестов](clojure/cljtest/parsing/ClojureVariablesParsingTest.java)
 
 
 ## Домашнее задание 10. Объектные выражения на Clojure

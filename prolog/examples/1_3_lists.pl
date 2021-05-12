@@ -1,8 +1,12 @@
-% Length of the list
+%%%%%%%%%%
+% Списки %
+%%%%%%%%%%
+
+% Длина списка
 
 count([], 0).
 count([_ | T], R) :- count(T, TR), R is TR + 1.
-% count/2 is the same as length/2 from standard library
+% count/2 соответствует length/2 из стандартной библиотеки
 
 /*
 ?- count([], R).
@@ -12,11 +16,11 @@ count([_ | T], R) :- count(T, TR), R is TR + 1.
 */
 
 
-% Checks whether list contains element.
+% Проверка принадлежности элемента списку
 
 contains(V, [V | _]).
 contains(V, [H | T]) :- V \= H, contains(V, T).
-% contains/2 is the same as memeber/2 from standard library
+% contains/2 соответствует memeber/2 из стандартной библиотеки
 
 /*
 ?- contains(1, [1, 2, 3]).
@@ -36,11 +40,11 @@ contains(V, [H | T]) :- V \= H, contains(V, T).
 */
 
 
-% List concatenation
+% Конкатенация списков
 
 concat([], B, B).
 concat([H | T], B, [H | R]) :- concat(T, B, R).
-% concat/3 is the same as append/3 from standard library
+% concat/3 соответствует append/3 из стандартной библиотеки
 
 /*
 ?- concat([1, 2, 3], [], R).
@@ -57,7 +61,8 @@ concat([H | T], B, [H | R]) :- concat(T, B, R).
    no
 */
 
-% Generate integer list range [N, L)
+
+% Список целых чисел в диапазоне [N, L)
 
 range(L, L, []).
 range(N, L, [N | T]) :- N < L, N1 is N + 1, range(N1, L, T).
@@ -69,7 +74,9 @@ range(N, L, [N | T]) :- N < L, N1 is N + 1, range(N1, L, T).
    R / [0,1,2,3,4,5,6,7,8,9]
 */
 
-% Table lookup
+
+% Поиск в "ассоциативном массиве"
+
 lookup(K, [(K, V) | _], V).
 lookup(K, [_ | T], R) :- lookup(K, T, R).
 
@@ -88,58 +95,7 @@ lookup(K, [_ | T], R) :- lookup(K, T, R).
 */
 
 
-% High-order rules
-
-map([], _, []).
-map([H | T], F, [RH | RT]) :- G =.. [F, H, RH], call(G), map(T, F, RT).
-
-% From calc.pl
-inc(N, R) :- number(N), !, R is N + 1.
-inc(N, R) :- number(R), !, N is R - 1.
-
-/*
-?- map([10, 20, 30], inc, R).
-   R / [11,21,31]
-?- map(R, inc, [10, 20, 30]).
-   R / [9,19,29]
-*/
-
-filter([], _, []).
-filter([H | T], P, [H | RT]) :- G =.. [P, H], call(G), !, filter(T, P, RT).
-filter([H | T], P, RT) :- filter(T, P, RT).
-
-odd(N) :- 1 is mod(N, 2).
-
-/*
-?- filter([1, 2, 3], odd, R).
-   R / [1,2,3]
-*/
-
-foldLeft([], Z, _, Z).
-foldLeft([H | T], Z, F, R) :- G =.. [F, Z, H, RH], call(G), foldLeft(T, RH, F, R).
-
-add(A, B, R) :- R is A + B.
-
-/*
-?- foldLeft([1, 2, 3], 0, add, R).
-   R / 6
-*/
-
-
-% Matrix transposition
-
-transpose([[] | _], []) :- !.
-transpose(L, [RH | RT]) :- map(L, head, RH), map(L, tail, Tails), transpose(Tails, RT).
-
-head([H | _], H).
-tail([_ | T], T).
-
-/*
-?- transpose([[1, 2], [3, 4]], R)
-   R / [[1,3],[2,4]]
-*/
-
-% Zip lists
+% Zip списков
 
 zip([], _, []) :- !.
 zip(_, [], []) :- !.

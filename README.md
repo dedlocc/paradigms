@@ -26,10 +26,11 @@
  * [Windows](prolog/RunProlog.cmd)
  * [*nix](prolog/RunProlog.sh)
 
-Лекция 1. Введение в Prolog
+Лекция 1. Факты, правила и вычисления
  * [Учебный план](prolog/examples/1_1_plan.pl)
  * [Вычисления](prolog/examples/1_2_calc.pl)
  * [Списки](prolog/examples/1_3_lists.pl)
+ * [Правила высшего порядка](prolog/examples/1_4_high-order.pl)
 
 
 ## Домашнее задание 11. Комбинаторные парсеры

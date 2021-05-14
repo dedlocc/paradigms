@@ -9,9 +9,7 @@ import java.util.List;
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class ObjectHarmonicTest extends ObjectExpressionTest {
-    public static final Dialect HYPOT_HMEAN_DIALECT = ObjectExpressionTest.ARITHMETIC_DIALECT.copy()
-            .rename("hypot", "Hypot")
-            .rename("hmean", "HMean");
+    public static final Dialect HYPOT_HMEAN_DIALECT = ObjectExpressionTest.ARITHMETIC_DIALECT.renamed("hypot", "Hypot", "hmean", "HMean");
 
     public static class HypotHmeanTests extends ArithmeticTests {{
         binary("hypot", (a, b) -> a * a + b * b);

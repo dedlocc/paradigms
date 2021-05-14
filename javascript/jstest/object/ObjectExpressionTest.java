@@ -12,20 +12,11 @@ import static jstest.functional.FunctionalExpressionTest.POLISH;
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class ObjectExpressionTest extends BaseJavascriptTest<JSEngine> {
-    public static final int MIN = 2;
-    public static final double D = 1e-4;
 
-    public static final Dialect PURE_DIALECT = dialect(
-            "new Variable('%s')",
-            "new Const(%s)",
-            (op, args) -> "new " + op + "(" + String.join(", ", args) + ")"
-    );
-    public static final Dialect ARITHMETIC_DIALECT = PURE_DIALECT.copy()
-            .rename("+", "Add")
-            .rename("-", "Subtract")
-            .rename("*", "Multiply")
-            .rename("/", "Divide")
-            .rename("negate", "Negate");
+    public static final Dialect ARITHMETIC_DIALECT = dialect("new Variable('%s')", "new Const(%s)",
+            (op, args) -> String.format("new %s(%s)", op, String.join(", ", args)))
+            .renamed("+", "Add", "-", "Subtract", "*", "Multiply", "/", "Divide", "negate", "Negate");
+
 
     final List<int[]> simplifications = list(
             new int[]{1, 1, 1},
@@ -42,77 +33,29 @@ public class ObjectExpressionTest extends BaseJavascriptTest<JSEngine> {
             new int[]{5, 2, 21}
     );
 
-    protected final boolean testSimplify;
-    protected final boolean testDiff;
+    private static final Diff DIFF = new Diff(2, N, dialect(
+            "'%s'", "%s",
+            (name, args) -> String.format("%s.%s(%s)", args.get(0), name, String.join(", ", args.subList(1, args.size())))
+    ));
 
     protected ObjectExpressionTest(final int mode, final Language language) {
         super(new JSEngine("objectExpression.js", ".evaluate"), language, mode >= 1);
-        testDiff = mode >= 2;
-        testSimplify = mode >= 3;
+
+        if (mode >= 2) {
+            DIFF.add(this);
+        }
+        if (mode >= 3) {
+            DIFF.addSimplify(this);
+        }
     }
 
     @Override
     protected void test() {
         super.test();
-
-        if (testDiff) {
-            for (final Expr test : language.tests) {
-                testDiff(test, test.parsed, null);
-                testDiff(test, parse(test.unparsed), null);
-            }
-            if (testSimplify) {
-                for (int i = 0; i < simplifications.size(); i++) {
-                    final Expr test = language.tests.get(i);
-                    testDiff(test, parse(test.unparsed), simplifications.get(i));
-                }
-            }
-        }
-    }
-
-    private void testDiff(final Expr test, final String expression, final int[] simplifications) {
-//        final int[] actual = new int[3];
-        for (int variable = 0; variable < 3; variable++) {
-            final String diff = expression + ".diff('" + "xyz".charAt(variable) + "')";
-            final String value = diff + (simplifications != null ? ".simplify()" : "");
-            System.out.println("Testing: " + value);
-            engine.parse(value);
-            if (simplifications != null) {
-                final Engine.Result<String> result = engine.parsedToString();
-                final int length = result.value.length();
-                final int expected = simplifications[variable];
-                assertTrue(
-                        String.format(
-                                "Simplified length too long: %d instead of %d%s",
-                                length,
-                                expected,
-                                result.context
-                        ),
-                        length <= expected
-                );
-//                actual[variable] = length;
-            }
-
-            final double di = variable == 0 ? D : 0;
-            final double dj = variable == 1 ? D : 0;
-            final double dk = variable == 2 ? D : 0;
-            for (int i = MIN; i <= N; i += 1) {
-                for (int j = MIN; j <= N; j += 1) {
-                    for (int k = MIN; k <= N; k += 1) {
-                        if (Double.isFinite(test.answer.applyAsDouble(i, j, k))) {
-                            final double expected = (
-                                    test.answer.applyAsDouble(i + di, j + dj, k + dk) -
-                                    test.answer.applyAsDouble(i - di, j - dj, k - dk)) / D / 2;
-                            evaluate(new double[]{i, j, k}, expected, EPS);
-                        }
-                    }
-                }
-            }
-        }
-//        System.out.format("{%s},%n", Arrays.stream(actual).mapToObj(Integer::toString).collect(Collectors.joining(", ")));
     }
 
     @Override
-    protected String parse(final String expression) {
+    public String parse(final String expression) {
         return "parse('" + expression + "')";
     }
 

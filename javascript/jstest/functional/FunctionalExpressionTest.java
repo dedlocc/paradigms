@@ -9,16 +9,11 @@ import java.util.function.BiFunction;
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class FunctionalExpressionTest extends BaseJavascriptTest<Engine> {
-    public static final Dialect PURE_FUNCTIONS = dialect(
+    public static final Dialect ARITHMETIC_FUNCTIONS = dialect(
             "variable('%s')",
             "cnst(%s)",
             (op, args) -> op + "(" + String.join(", ", args) + ")"
-    );
-    public static final Dialect ARITHMETIC_FUNCTIONS = PURE_FUNCTIONS.copy()
-            .rename("+", "add")
-            .rename("-", "subtract")
-            .rename("/", "divide")
-            .rename("*", "multiply");
+    ).renamed("+", "add", "-", "subtract", "/", "divide", "*", "multiply");
 
     public static final Dialect POLISH = dialect(
             "%s",
@@ -35,7 +30,7 @@ public class FunctionalExpressionTest extends BaseJavascriptTest<Engine> {
     }
 
     @Override
-    protected String parse(final String expression) {
+    public String parse(final String expression) {
         return "parse('" + expression + "')";
     }
 

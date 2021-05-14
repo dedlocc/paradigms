@@ -9,9 +9,8 @@ import java.util.List;
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class ObjectCubeTest extends ObjectExpressionTest {
-    public static final Dialect CUBE_CBRT_DIALECT = ObjectExpressionTest.ARITHMETIC_DIALECT.copy()
-            .rename("cube", "Cube")
-            .rename("cbrt", "Cbrt");
+    public static final Dialect CUBE_CBRT_DIALECT = ObjectExpressionTest.ARITHMETIC_DIALECT
+            .renamed("cube", "Cube", "cbrt", "Cbrt");
 
     public static class CubeCbrtTests extends ArithmeticTests {{
         unary("cube", a -> a * a * a);

@@ -9,9 +9,8 @@ import java.util.List;
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class ObjectArcTanTest extends ObjectExpressionTest {
-    public static final Dialect ARC_TAN_DIALECT = ObjectExpressionTest.ARITHMETIC_DIALECT.copy()
-            .rename("atan", "ArcTan")
-            .rename("atan2", "ArcTan2");
+    public static final Dialect ARC_TAN_DIALECT =
+            ObjectExpressionTest.ARITHMETIC_DIALECT.renamed("atan", "ArcTan", "atan2", "ArcTan2");
 
     public static class AtcTanTests extends ArithmeticTests {{
         unary("atan", Math::atan);

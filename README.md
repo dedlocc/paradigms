@@ -38,12 +38,12 @@
 Модификации
  * *Базовая*
     * Код должен находиться в файле `clojure-solutions/expression.clj`.
-    * [Исходный код тестов](clojure/cljtest/parsing/ClojureObjectParsingTest.java)
+    * [Исходный код тестов](clojure/cljtest/parsing/ParserTest.java)
         * Запускать c аргументом `easy` или `hard`
  * *Variables* (32-33). Дополнительно реализовать поддержку:
     * Переменных, состоящих из произвольного количества букв `XYZ` в любом регистре
         * Настоящее имя переменной определяется первой буквой ее имени
-    * [Исходный код тестов](clojure/cljtest/parsing/ClojureVariablesParsingTest.java)
+    * [Исходный код тестов](clojure/cljtest/parsing/VariablesTest.java)
  * *Boolean* (34-35). Сделать модификацию *Variables* и дополнительно реализовать поддержку:
     * Булевских операций
         * Аргументы: число больше 0 → `true`, иначе → `false`
@@ -52,7 +52,7 @@
         * `Or`  (`||`) - или: `5 & -6` равно 1
         * `Xor` (`^^`) - исключающее или: `5 ^ -6` равно 1
         * операции по увеличению приоритета: `^^`, `||`, `&&`, операции базовой модификации
-    * [Исходный код тестов](clojure/cljtest/parsing/ClojureBooleanParsingTest.java)
+    * [Исходный код тестов](clojure/cljtest/parsing/BooleanTest.java)
 
 
 ## Домашнее задание 10. Объектные выражения на Clojure
@@ -60,29 +60,29 @@
 Модификации
  * *Базовая*
     * Код должен находиться в файле `clojure-solutions/expression.clj`.
-    * [Исходный код тестов](clojure/cljtest/object/ClojureObjectExpressionTest.java)
+    * [Исходный код тестов](clojure/cljtest/object/ExpressionTest.java)
         * Запускать c аргументом `easy` или `hard`
  * *SinCos* (32-33). Дополнительно реализовать поддержку:
     * унарных операций:
         * `Sin` (`sin`) – синус, `(sin 4846147)` примерно равно 1;
         * `Cos` (`cos`) – косинус, `(cos 5419351)` примерно равно 1.
-    * [Исходный код тестов](clojure/cljtest/object/ClojureObjectSinCosTest.java)
+    * [Исходный код тестов](clojure/cljtest/object/SinCosTest.java)
  * *SinhCosh* (34-35). Дополнительно реализовать поддержку:
     * унарных операций:
         * `Sinh` (`sinh`) – гиперболический синус, `(sinh 3)` немного больше 10;
         * `Cosh` (`cosh`) – гиперболический косинус, `(cosh 3)` немного меньше 10.
-    * [Исходный код тестов](clojure/cljtest/object/ClojureObjectSinhCoshTest.java)
+    * [Исходный код тестов](clojure/cljtest/object/SinhCoshTest.java)
  * *SumAvg* (36-37). Дополнительно реализовать поддержку:
     * операций произвольного числа аргументов:
         * `Sum` (`sum`) – сумма, `(sum 1 2 3)` равно 6;
         * `Avg` (`avg`) – арифметическое среднее, `(avg 1 2 3)` равно 2;
-    * [Исходный код тестов](clojure/cljtest/object/ClojureObjectSumAvgTest.java)
+    * [Исходный код тестов](clojure/cljtest/object/SumAvgTest.java)
  * *Means* (38-39). Дополнительно реализовать поддержку:
     * операций произвольного числа аргументов:
         * `ArithMean` (`arith-mean`) – арифметическое среднее `(arith-mean 1 2 6)` равно 3;
         * `GeomMean` (`geom-mean`) – геометрическое среднее `(geom-mean 1 2 4)` равно 2;
         * `HarmMean` (`harm-mean`) – гармоническое среднее, `(harm-mean 2 3 6)` равно 3;
-    * [Исходный код тестов](clojure/cljtest/object/ClojureObjectMeansTest.java)
+    * [Исходный код тестов](clojure/cljtest/object/MeansTest.java)
 
 
 ## Домашнее задание 9. Функциональные выражения на Clojure
@@ -90,28 +90,28 @@
 Модификации
  * *Базовая*
     * Код должен находиться в файле `clojure-solutions/expression.clj`.
-    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalExpressionTest.java)
+    * [Исходный код тестов](clojure/cljtest/functional/ExpressionTest.java)
         * Запускать c аргументом `easy` или `hard`
  * *SinCos* (32-33). Дополнительно реализовать поддержку:
     * унарных операций:
         * `sin` – синус, `(sin 4846147)` примерно равно 1;
         * `cos` – косинус, `(cos 5419351)` примерно равно 1.
-    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalSinCosTest.java)
+    * [Исходный код тестов](clojure/cljtest/functional/SinCosTest.java)
  * *SinhCosh* (34-35). Дополнительно реализовать поддержку:
     * унарных операций:
         * `sinh` – гиперболический синус, `(sinh 3)` немного больше 10;
         * `cosh` – гиперболический косинус, `(cosh 3)` немного меньше 10.
-    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalSinhCoshTest.java)
+    * [Исходный код тестов](clojure/cljtest/functional/SinhCoshTest.java)
  * *SumAvg* (36-37). Дополнительно реализовать поддержку:
     * операций произвольного числа аргументов:
         * `sum` – сумма, `(sum 1 2 3)` равно 6;
         * `avg` – среднее, `(avg 1 2 3)` равно 2;
-    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalSumAvgTest.java)
+    * [Исходный код тестов](clojure/cljtest/functional/SumAvgTest.java)
  * *MeanVarn* (38-39). Дополнительно реализовать поддержку:
     * операций произвольного числа аргументов:
         * `mean` – математическое ожидание аргументов, `(mean 1 2 6)` равно 3;
         * `varn` – дисперсия аргументов, `(varn 2 5 11)` равно 14;
-    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalMeanVarnTest.java)
+    * [Исходный код тестов](clojure/cljtest/functional/MeanVarnTest.java)
 
 
 ## Домашнее задание 8. Линейная алгебра на Clojure
@@ -126,13 +126,13 @@
     * Добавьте операции поэлементного сложения (`c+`),
         вычитания (`c-`), умножения (`c*`) и деления (`cd`) кубоидов.
         Например, `(с+ [[[1] [2]] [[3] [4]]] [[[5] [6]] [[7] [8]]])` должно быть равно `[[[6] [8]] [[10] [12]]]`.
-    * [Исходный код тестов](clojure/cljtest/linear/LinearCuboidTest.java)
+    * [Исходный код тестов](clojure/cljtest/linear/CuboidTest.java)
  * *Tensor* (34-35)
     * Назовем _тензором_ многомерную прямоугольную таблицу чисел.
     * Добавьте операции поэлементного сложения (`t+`),
         вычитания (`t-`) и умножения (`t*`) тензоров.
         Например, `(t+ [[1 2] [3 4]] [[5 6] [7 8]])` должно быть равно `[[6 8] [10 12]]`.
-    * [Исходный код тестов](clojure/cljtest/linear/LinearTensorTest.java)
+    * [Исходный код тестов](clojure/cljtest/linear/TensorTest.java)
  * *Simplex* (36-37)
     * Назовем _симплексом_ многомерную таблицу чисел, 
       такую что для некоторого `n` в ней существуют все значения
@@ -140,7 +140,7 @@
     * Добавьте операции поэлементного сложения (`x+`),
         вычитания (`x-`) и умножения (`x*`) симплексов.
         Например, `(x+ [[1 2] [3]] [[5 6] [7]])` должно быть равно `[[6 8] [10]]`.
-    * [Исходный код тестов](clojure/cljtest/linear/LinearSimplexTest.java)
+    * [Исходный код тестов](clojure/cljtest/linear/SimplexTest.java)
  * *Broadcast* (38-39)
     * Назовем _тензором_ многомерную прямоугольную таблицу чисел.
     * _Форма_ тензора – последовательность чисел
@@ -167,7 +167,7 @@
       должны быть предварительно распространены до тензоров большей размерности.
       Например, `(tb+ 1 [[10 20 30] [40 50 60]] [100 200])` 
       должно быть равно `[[111 121 131] [241 251 261]]`.
-    * [Исходный код тестов](clojure/cljtest/linear/LinearBroadcastTest.java)
+    * [Исходный код тестов](clojure/cljtest/linear/BroadcastTest.java)
 
 
 Для запуска тестов можно использовать скрипты

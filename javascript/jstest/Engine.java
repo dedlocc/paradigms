@@ -8,6 +8,8 @@ public interface Engine {
 
     Result<Number> evaluate(double[] vars);
 
+    Result<String> parsedToString();
+
     class Result<T> {
         public final String context;
         public final T value;

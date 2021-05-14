@@ -24,7 +24,7 @@ public abstract class PrologTest extends BaseTest {
         return prolog.test(rule, args);
     }
 
-    protected Value solveOne(final Rule rule, final Object... args) {
+    public Value solveOne(final Rule rule, final Object... args) {
         return prolog.solveOne(rule, args);
     }
 }

@@ -5,30 +5,55 @@ import alice.tuprolog.Struct;
 import alice.tuprolog.Term;
 import base.Asserts;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-public abstract class Value {
+public final class Value {
     private static final Struct EMPTY_LIST = PrologUtil.pure("[]");
 
-    public static Value term(final Term term) {
-        return new Value() {
-            @Override
-            public Term toTerm() {
-                return term;
-            }
+    private final Term term;
 
-            @Override
-            public String toString() {
-                return term.toString();
-            }
-        };
+    private Value(final Term term) {
+        this.term = term;
+    }
+
+    public Term toTerm() {
+        return term;
+    }
+
+    public List<Value> toList() {
+        Asserts.assertTrue("Type", toTerm().isList());
+
+        Struct list = (Struct) toTerm();
+        final List<Value> result = new ArrayList<>();
+        while (!list.isEmptyList()) {
+            result.add(term(list.getTerm(0)));
+            list = (Struct) list.getTerm(1);
+        }
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return term.toString();
+    }
+
+    @Override
+    public boolean equals(final Object that) {
+        return this == that || that instanceof Value && term.equals(((Value) that).term);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(term);
+    }
+
+    public static Value term(final Term term) {
+        return new Value(term);
     }
 
     public static Value convert(final Object term) {
@@ -38,6 +63,9 @@ public abstract class Value {
             return term((Term) term);
         } else if (term instanceof List) {
             return list((List<?>) term, Value::convert);
+        } else if (term instanceof Map.Entry) {
+            final Map.Entry<?, ?> entry = (Map.Entry<?, ?>) term;
+            return Value.struct(",", convert(entry.getKey()), convert(entry.getValue()));
         } else if (term instanceof Integer || term instanceof Long) {
             return term(Int.of((Number) term));
         } else {
@@ -59,19 +87,5 @@ public abstract class Value {
 
     public static Value struct(final String rule, final Object... args) {
         return term(Struct.of(rule, Stream.of(args).map(Value::convert).map(Value::toTerm).toArray(Term[]::new)));
-    }
-
-    public abstract Term toTerm();
-
-    public List<Value> toList() {
-        Asserts.assertTrue("Type", toTerm().isList());
-
-        Struct list = (Struct) toTerm();
-        final List<Value> result = new ArrayList<>();
-        while (!list.isEmptyList()) {
-            result.add(term(list.getTerm(0)));
-            list = (Struct) list.getTerm(1);
-        }
-        return result;
     }
 }

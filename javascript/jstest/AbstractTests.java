@@ -65,15 +65,15 @@ public abstract class AbstractTests implements Randomized {
         return generate(randomInt(depth));
     }
 
-    protected void tests(final TestExpression... tests) {
+    public void tests(final TestExpression... tests) {
         this.tests.addAll(Arrays.asList(tests));
     }
 
-    protected void fixed(final String name, final int arity, final Func f) {
+    public void fixed(final String name, final int arity, final Func f) {
         any(name, arity, arity, f);
     }
 
-    protected void any(final String name, final int minArity, final int maxArity, final Func f) {
+    public void any(final String name, final int minArity, final int maxArity, final Func f) {
         operatorNames.add(name);
         operators.put(name, new Operator(minArity, maxArity, f));
     }
@@ -91,7 +91,7 @@ public abstract class AbstractTests implements Randomized {
         nullary.put(name, f);
     }
 
-    protected TestExpression f(final String name, final TestExpression... args) {
+    public TestExpression f(final String name, final TestExpression... args) {
         return (parsed, unparsed) -> {
             final List<Expr> rendered = Arrays.stream(args).map(a -> a.render(parsed, unparsed)).collect(Collectors.toList());
             return expr(
@@ -113,11 +113,11 @@ public abstract class AbstractTests implements Randomized {
         return (parsed, unparsed) -> expr(Dialect.nullary(name), Dialect.nullary(name), nullary.get(name));
     }
 
-    protected static TestExpression c(final int value) {
+    public static TestExpression c(final int value) {
         return (parsed, unparsed) -> expr(parsed.constant(value), unparsed.constant(value), vars -> value);
     }
 
-    protected TestExpression variable(final String name, final int index) {
+    public TestExpression variable(final String name, final int index) {
         final TestExpression variable = (parsed, unparsed) -> expr(parsed.variable(name), unparsed.variable(name), vars -> vars[index]);
         variables.add(variable);
         variableNames.put(name, index);
@@ -141,7 +141,7 @@ public abstract class AbstractTests implements Randomized {
         return random;
     }
 
-    protected interface TestExpression {
+    public interface TestExpression {
         Expr render(Dialect parsed, Dialect unparsed);
     }
 
@@ -161,6 +161,5 @@ public abstract class AbstractTests implements Randomized {
         public double applyAsDouble(final double[] args) {
             return Arrays.stream(args).allMatch(Double::isFinite) ? f.applyAsDouble(args) : Double.NaN;
         }
-
     }
 }

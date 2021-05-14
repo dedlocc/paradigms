@@ -1,7 +1,5 @@
 package jstest.prefix;
 
-import expression.BaseTest;
-import jstest.AbstractTests;
 import jstest.ArithmeticTests;
 import jstest.EngineException;
 import jstest.Language;
@@ -18,14 +16,17 @@ public class PrefixParserTest extends ObjectExpressionTest {
             (op, args) -> "(" + op + " " + String.join(" ", args) + ")"
     );
 
-    public PrefixParserTest(final int mode, final Language language, final String toString) {
+    private final String parse;
+
+    public PrefixParserTest(final int mode, final Language language, final String toString, final String parse) {
         super(mode, language);
         engine.toStringMethod = toString;
+        this.parse = parse;
     }
 
     @Override
-    protected String parse(final String expression) {
-        return "parsePrefix('" + expression + "')";
+    public String parse(final String expression) {
+        return parse + "('" + expression + "')";
     }
 
     @Override
@@ -64,18 +65,16 @@ public class PrefixParserTest extends ObjectExpressionTest {
     }
 
     public static void main(final String... args) {
-        test(PrefixParserTest.class, PrefixParserTest::new, new ArithmeticTests(), args, ARITHMETIC_DIALECT, "prefix");
+        final int mode = prefixMode(args, PrefixParserTest.class);
+        final Language language = new Language(ARITHMETIC_DIALECT, PREFIX, new ArithmeticTests());
+        new PrefixParserTest(mode, language, "prefix", "parsePrefix").run(PrefixParserTest.class);
     }
 
-    public static <T extends BaseTest> void test(final Class<T> type, final Constructor<T> cons, final AbstractTests tests, final String[] args, final Dialect parsed, final String toString) {
-        cons.create(prefixMode(args, type), new Language(parsed, PREFIX, tests), toString).run();
-    }
-
-    protected static <T extends BaseTest> int prefixMode(final String[] args, final Class<T> type) {
+    protected static int prefixMode(final String[] args, final Class<?> type) {
         return mode(args, type, "easy", "hard") + 1;
     }
 
     interface Constructor<T> {
-        T create(int mode, Language language, String toString);
+        T create(int mode, Language language, String toString, String parse);
     }
 }

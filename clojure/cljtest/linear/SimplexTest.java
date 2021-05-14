@@ -8,10 +8,10 @@ import java.util.stream.Stream;
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-public class LinearSimplexTest extends LinearTest {
+public class SimplexTest extends LinearTest {
     public static final List<Item.Fun> SIMPLEX = Item.functions("x");
 
-    public LinearSimplexTest(final String[] args) {
+    public SimplexTest(final String[] args) {
         super(args);
     }
 
@@ -76,6 +76,6 @@ public class LinearSimplexTest extends LinearTest {
     }
 
     public static void main(final String... args) {
-        new LinearSimplexTest(args).run();
+        new SimplexTest(args).run();
     }
 }

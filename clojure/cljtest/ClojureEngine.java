@@ -15,6 +15,7 @@ public class ClojureEngine implements Engine {
     private final String evaluateString;
     private Result<Object> parsed;
     private String expression;
+    public ClojureScript.F<String> toString = ClojureScript.function("toString", String.class);
 
     public ClojureEngine(final String script, final Optional<String> evaluate) {
         ClojureScript.loadScript(script);
@@ -40,5 +41,10 @@ public class ClojureEngine implements Engine {
 
     public Result<String> toString(final ClojureScript.F<String> f) {
         return f.call(parsed);
+    }
+
+    @Override
+    public Result<String> parsedToString() {
+        return toString(toString);
     }
 }

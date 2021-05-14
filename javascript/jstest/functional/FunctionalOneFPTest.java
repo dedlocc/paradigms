@@ -6,10 +6,7 @@ import jstest.Language;
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class FunctionalOneFPTest extends FunctionalOneTwoTest {
-    public static final Dialect FP_FUNCTIONS = ARITHMETIC_FUNCTIONS.copy()
-            .rename("*+", "madd")
-            .rename("_", "floor")
-            .rename("^", "ceil");
+    public static final Dialect FP_FUNCTIONS = ARITHMETIC_FUNCTIONS.renamed("*+", "madd", "_", "floor", "^", "ceil");
 
     public static class FPTests extends OneTwoTests {{
         final Func madd = args -> args[0] * args[1] + args[2];

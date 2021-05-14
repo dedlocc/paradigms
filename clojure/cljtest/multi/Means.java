@@ -9,13 +9,11 @@ import java.util.stream.DoubleStream;
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-public class MultiMeansTests extends MultiTests {
-    public MultiMeansTests(final boolean testMulti) {
-        super(testMulti);
-
-        any("arith-mean", 1, mean((args, n) -> args.sum() / n));
-        any("geom-mean", 1, mean((args, n) -> Math.pow(Math.abs(product(args)), 1 / n)));
-        any("harm-mean", 1, mean((args, n) -> {
+public class Means {
+    public static void add(final Checker t) {
+        t.any("arith-mean", 1, mean((args, n) -> args.sum() / n));
+        t.any("geom-mean", 1, mean((args, n) -> Math.pow(Math.abs(product(args)), 1 / n)));
+        t.any("harm-mean", 1, mean((args, n) -> {
             final double sum = args.map(a -> 1 / a).sum();
             return Double.isFinite(sum) ? n / sum : Double.NaN;
         }));

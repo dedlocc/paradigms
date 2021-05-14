@@ -6,10 +6,10 @@ import java.util.stream.IntStream;
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-public class LinearTensorTest extends LinearTest {
+public class TensorTest extends LinearTest {
     public static final List<Item.Fun> TENSOR = Item.functions("t");
 
-    public LinearTensorTest(final String[] args) {
+    public TensorTest(final String[] args) {
         super(args);
     }
 
@@ -36,6 +36,6 @@ public class LinearTensorTest extends LinearTest {
     }
 
     public static void main(final String... args) {
-        new LinearTensorTest(args).run();
+        new TensorTest(args).run();
     }
 }

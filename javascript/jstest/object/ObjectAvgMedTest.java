@@ -9,9 +9,8 @@ import java.util.Arrays;
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class ObjectAvgMedTest extends ObjectExpressionTest {
-    public static final Dialect AVG_MED_DIALECT = ObjectExpressionTest.ARITHMETIC_DIALECT.copy()
-            .rename("med3", "Med3")
-            .rename("avg5", "Avg5");
+    public static final Dialect AVG_MED_DIALECT =
+            ObjectExpressionTest.ARITHMETIC_DIALECT.renamed("med3", "Med3", "avg5", "Avg5");
 
     public static class AvgMedTests extends ArithmeticTests {{
         fixed("avg5", 5, args -> Arrays.stream(args).summaryStatistics().getAverage());

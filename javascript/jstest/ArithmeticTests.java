@@ -1,5 +1,6 @@
 package jstest;
 
+import java.util.function.DoubleUnaryOperator;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -44,4 +45,5 @@ public class ArithmeticTests extends VariablesTests {
                 f("-", f("+", f("*", vx, vx), f("*", c(5), f("*", vz, f("*", vz, vz)))), f("*", vy, c(8)))
         );
     }
+
 }

@@ -10,10 +10,10 @@ import java.util.stream.Stream;
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-public class LinearBroadcastTest extends LinearTest {
+public class BroadcastTest extends LinearTest {
     public static final List<Item.Fun> BROADCAST = Item.functions("tb");
 
-    public LinearBroadcastTest(final String[] args) {
+    public BroadcastTest(final String[] args) {
         super(args);
     }
 
@@ -74,6 +74,6 @@ public class LinearBroadcastTest extends LinearTest {
     }
 
     public static void main(final String... args) {
-        new LinearBroadcastTest(args).run();
+        new BroadcastTest(args).run();
     }
 }

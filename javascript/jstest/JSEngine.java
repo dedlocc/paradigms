@@ -107,10 +107,6 @@ public class JSEngine implements Engine {
     }
 
     public Result<String> parsedToString() {
-        return parsedToString(toStringMethod);
-    }
-
-    public Result<String> parsedToString(final String toStringMethod) {
         return evaluate("expr." + toStringMethod + "()", String.class);
     }
 

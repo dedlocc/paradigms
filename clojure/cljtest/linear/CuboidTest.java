@@ -5,15 +5,15 @@ import java.util.List;
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-public class LinearCuboidTest extends LinearTest {
+public class CuboidTest extends LinearTest {
     private static final List<Item.Fun> CUBOID = Item.functions("c");
 
-    public LinearCuboidTest(final String[] args) {
+    public CuboidTest(final String[] args) {
         super(args);
     }
 
     public static void main(final String... args) {
-        new LinearCuboidTest(args).run();
+        new CuboidTest(args).run();
     }
 
     protected void test(final int args) {

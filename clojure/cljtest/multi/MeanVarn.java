@@ -6,12 +6,10 @@ import java.util.stream.DoubleStream;
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-public class MultiMeanVarnTests extends MultiTests {
-    public MultiMeanVarnTests(final boolean testMulti) {
-        super(testMulti);
-
-        any("mean", 1, args -> mean(Arrays.stream(args)));
-        any("varn", 1, MultiMeanVarnTests::varn);
+public class MeanVarn {
+    public static void add(final Checker t) {
+        t.any("mean", 1, args -> mean(Arrays.stream(args)));
+        t.any("varn", 1, MeanVarn::varn);
     }
 
     private static double varn(final double[] args) {

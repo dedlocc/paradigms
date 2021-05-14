@@ -12,10 +12,11 @@ import java.util.function.ToDoubleFunction;
  */
 public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
     public static final int N = 5;
-    public static final double EPS = 1e-4;
+    public static final double EPS = 1e-3;
 
-    protected final E engine;
-    protected final Language language;
+    public final E engine;
+    public final Language language;
+    private final List<Runnable> stages = new ArrayList<>();
 
     final boolean testParsing;
 
@@ -29,7 +30,7 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
         return !Character.isLetterOrDigit(ch) && "+-*/.<>=&|^".indexOf(ch) == -1;
     }
 
-    protected static String addSpaces(final String expression, final Random random) {
+    public static String addSpaces(final String expression, final Random random) {
         String spaced = expression;
         for (int n = StrictMath.min(10, 200 / expression.length()); n > 0;) {
             final int index = random.nextInt(spaced.length() + 1);
@@ -54,19 +55,20 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
         }
 
         testRandom(444);
+        stages.forEach(Runnable::run);
     }
 
-    protected abstract String parse(final String expression);
+    public abstract String parse(final String expression);
 
     protected void test(final String expression, final Func f, final String unparsed) {
         System.out.println("Testing: " + expression);
 
         engine.parse(expression);
-        for (double i = 0; i <= N; i += 1) {
-            for (double j = 0; j <= N; j += 1) {
-                for (double k = 0; k <= N; k += 1) {
+        for (double i = 0; i <= N; i++) {
+            for (double j = 0; j <= N; j++) {
+                for (double k = 0; k <= N; k++) {
                     final double[] vars = new double[]{i, j, k};
-                    evaluate(vars, f.applyAsDouble(vars), EPS);
+                    evaluate(vars, f.applyAsDouble(vars));
                 }
             }
         }
@@ -89,7 +91,7 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
             final double answer = test.answer.applyAsDouble(vars);
 
             engine.parse(test.parsed);
-            evaluate(vars, answer, EPS);
+            evaluate(vars, answer);
             test(test.parsed, test.unparsed);
             test(addSpaces(test.parsed, random), test.unparsed);
             if (testParsing) {
@@ -98,16 +100,16 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
                 test(expr, test.unparsed);
 
                 engine.parse(expr);
-                evaluate(vars, answer, EPS);
+                evaluate(vars, answer);
                 counter.passed();
             }
         }
     }
 
-    protected void evaluate(final double[] vars, final double answer, final double precision) {
+    public void evaluate(final double[] vars, final double answer) {
         counter.nextTest();
         final Engine.Result<Number> result = engine.evaluate(vars);
-        assertEquals(result.context, precision, answer, result.value.doubleValue());
+        assertEquals(result.context, EPS, answer, result.value.doubleValue());
         counter.passed();
     }
 
@@ -115,7 +117,7 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
         return new Dialect(variable, constant, nary);
     }
 
-    protected static int mode(final String[] args, final Class<?> type, final String... modes) {
+    public static int mode(final String[] args, final Class<?> type, final String... modes) {
         if (args.length == 0) {
             System.err.println("ERROR: No arguments found");
         } else if (args.length > 1) {
@@ -128,6 +130,10 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
         System.err.println("Usage: java -ea " + JSEngine.OPTIONS + " " + type.getName() + " {" + String.join("|", modes) + "}");
         System.exit(0);
         return -1;
+    }
+
+    public void addStage(final Runnable stage) {
+        stages.add(stage);
     }
 
     public interface Func extends ToDoubleFunction<double[]> {
@@ -152,9 +158,17 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
             this.operations = operations;
         }
 
-        public Dialect rename(final String name, final String alias) {
-            operations.put(name, alias);
-            return this;
+        public void rename(final String... renames) {
+            assert renames.length % 2 == 0;
+            for (int i = 0; i < renames.length; i += 2) {
+                operations.put(renames[i], renames[i + 1]);
+            }
+        }
+
+        public Dialect renamed(final String... renames) {
+            final Dialect copy = new Dialect(variable, constant, nary, new HashMap<>(operations));
+            copy.rename(renames);
+            return copy;
         }
 
         public String variable(final String name) {
@@ -173,9 +187,6 @@ public abstract class BaseJavascriptTest<E extends Engine> extends BaseTest {
             return name;
         }
 
-        public Dialect copy() {
-            return new Dialect(variable, constant, nary, new HashMap<>(operations));
-        }
     }
 
     public static class Expr {

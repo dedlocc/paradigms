@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public abstract class AbstractTests implements Randomized {
-    private static final int MAX_C = 1_000_000;
+    private static final int MAX_C = 1_000;
 
     protected final Random random = Randomized.initRandom(8045702385702345704L, getClass());
 
@@ -34,7 +34,7 @@ public abstract class AbstractTests implements Randomized {
     }
 
     public Expr randomTest(final int size, final Dialect parsed, final Dialect unparsed) {
-        return generate(size / 5 + 2).render(parsed, unparsed);
+        return generate(size / 10 + 2).render(parsed, unparsed);
     }
 
     private TestExpression generate(final int depth) {

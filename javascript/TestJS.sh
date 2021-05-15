@@ -7,7 +7,7 @@ if [[ -z "$2" ]] ; then
 fi
 
 CLASS="$1"
-TAIL="$2 ${3-}"
+ARGS="$2 ${3-}"
 
 OUT=__out
 JS="$(dirname "$0")"
@@ -17,4 +17,4 @@ javac \
     -d "$OUT" \
     "--class-path=$REPO/java:$REPO/javascript" \
     "$JS/${CLASS//\./\/}.java" \
-  && java -ea "--module-path=$JS/graal" "--class-path=$OUT" "$CLASS" $TAIL
+  && java -ea "--module-path=$JS/graal" "--class-path=$OUT" "$CLASS" $ARGS

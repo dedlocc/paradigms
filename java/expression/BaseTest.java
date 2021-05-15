@@ -28,10 +28,10 @@ public abstract strictfp class BaseTest extends Asserts implements Randomized {
         run(getClass());
     }
 
-    public void run(final Class<?> test) {
-        System.out.println("=== Testing " + test.getSimpleName());
+    public void run(final Class<?> test, final String... args) {
+        System.out.println("=== Testing " + test.getSimpleName() + " " + String.join(" ", args));
         test();
-        counter.printStatus(test);
+        counter.printStatus(test, args);
     }
 
     protected abstract void test();

@@ -17,14 +17,15 @@ import java.util.stream.Collectors;
 public class JSEngine implements Engine {
     public static Path JS_ROOT = Path.of(".");
     public static final String OPTIONS = "--module-path=<js>/graal";
+
     private final ScriptEngine engine;
     private final String evaluate;
+    private final String toString;
     private String expression;
 
-    public String toStringMethod = "toString";
-
-    public JSEngine(final String script, final String evaluate) {
+    public JSEngine(final Path script, final String evaluate, final String toString) {
         this.evaluate = evaluate;
+        this.toString = toString;
 
         try {
             engine = new ScriptEngineManager().getEngineByName("Graal.js");
@@ -49,7 +50,7 @@ public class JSEngine implements Engine {
         }
 
         try {
-            include(script, engine);
+            include(script.toString(), engine);
         } catch (final ScriptException e) {
             throw new EngineException("Script error", e);
         }
@@ -107,7 +108,7 @@ public class JSEngine implements Engine {
     }
 
     public Result<String> parsedToString() {
-        return evaluate("expr." + toStringMethod + "()", String.class);
+        return evaluate("expr." + toString + "()", String.class);
     }
 
     @SuppressWarnings({"MethodMayBeStatic", "unused"})

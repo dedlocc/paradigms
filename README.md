@@ -32,6 +32,11 @@
  * [Списки](prolog/examples/1_3_lists.pl)
  * [Правила высшего порядка](prolog/examples/1_4_high-order.pl)
 
+Лекция 2. Задачи, унификация и объекты
+ * [Задача о расстановке ферзей](prolog/examples/2_1_queens.pl)
+ * [Задача Эйнштейна](prolog/examples/2_2_einstein.pl)
+ * [Арифметические выражения](prolog/examples/2_3_expressions.pl)
+
 
 ## Домашнее задание 11. Комбинаторные парсеры
 

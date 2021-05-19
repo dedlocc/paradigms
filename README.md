@@ -24,7 +24,7 @@
     * [Исходный код тестов](prolog/prtest/primes/PrologSquareTest.java)
  * *Power* (34-35)
     * Добавьте правило `power_divisors(N, I, D)`, возвращающее делители Nⁱ:
-      `square_divisors(6, 2, [2, 2, 3, 3])`.
+      `power_divisors(6, 2, [2, 2, 3, 3])`.
     * [Исходный код тестов](prolog/prtest/primes/PrologPowerTest.java)
 
 Для запуска тестов можно использовать скрипты

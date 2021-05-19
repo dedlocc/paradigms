@@ -1,15 +1,16 @@
 package jstest.prefix;
 
+import jstest.Engine;
 import jstest.EngineException;
-import jstest.object.ObjectTester;
 import jstest.expression.Dialect;
 import jstest.expression.Language;
+import jstest.object.ObjectTester;
 
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class ParserTester extends ObjectTester {
-    public static final Dialect PREFIX = new Dialect("%s", "%s", "(op args)", " ");
+    public static final Dialect PREFIX = new Dialect("%s", "%s", "({op} {args})", " ");
 
     private final String insertions;
 
@@ -19,9 +20,9 @@ public class ParserTester extends ObjectTester {
     }
 
     @Override
-    protected void test(final String parsed, final String unparsed) {
-        super.test(parsed, unparsed);
-        super.test(removeSpaces(parsed), unparsed);
+    protected void test(final Engine.Result<Object> prepared, final String unparsed) {
+        super.test(prepared, unparsed);
+        super.test(engine.parse(removeSpaces(unparsed)), unparsed);
 
         for (int i = 0; i < 1 + Math.min(10, 200 / unparsed.length()); i++) {
             final int index = randomInt(unparsed.length());
@@ -46,7 +47,7 @@ public class ParserTester extends ObjectTester {
 
     protected String assertParsingError(final String prefix, final String comment, final String suffix) {
         try {
-            engine.parse(parse(prefix + suffix));
+            parse(prefix + suffix);
             throw new AssertionError("Parsing error expected for " + prefix + comment + suffix);
         } catch (final EngineException e) {
             return e.getCause().getMessage();

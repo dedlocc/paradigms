@@ -1,6 +1,9 @@
 package prtest;
 
 import expression.BaseTest;
+import jstest.Engine;
+
+import java.nio.file.Path;
 
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
@@ -8,7 +11,7 @@ import expression.BaseTest;
 public abstract class PrologTest extends BaseTest {
     private final PrologScript prolog;
 
-    public PrologTest(final String file) {
+    public PrologTest(final Path file) {
         prolog = new PrologScript(file);
     }
 
@@ -24,7 +27,7 @@ public abstract class PrologTest extends BaseTest {
         return prolog.test(rule, args);
     }
 
-    public Value solveOne(final Rule rule, final Object... args) {
+    public Engine.Result<Value> solveOne(final Rule rule, final Object... args) {
         return prolog.solveOne(rule, args);
     }
 }

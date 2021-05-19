@@ -4,6 +4,7 @@ import alice.tuprolog.*;
 import alice.tuprolog.exceptions.NoMoreSolutionException;
 import alice.tuprolog.exceptions.NoSolutionException;
 import base.Asserts;
+import jstest.Engine;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -21,10 +22,15 @@ public class PrologScript {
 
     public PrologScript() {
         prolog.addExceptionListener(exceptionEvent -> {throw new PrologException(exceptionEvent.getMsg());});
-        prolog.addOutputListener(event -> System.out.print(event.getMsg()));
+        prolog.addOutputListener(event -> {
+            // Strip text_term/2 output
+            if (!event.getMsg().endsWith("'\nV_e0")) {
+                System.out.print(event.getMsg());
+            }
+        });
     }
 
-    public PrologScript(final String file) {
+    public PrologScript(final Path file) {
         this();
         consult(file);
     }
@@ -33,7 +39,7 @@ public class PrologScript {
         return new PrologException(String.format(format, arguments), cause);
     }
 
-    public void consult(final String file) {
+    public void consult(final Path file) {
         final Path path = PROLOG_ROOT.resolve(file);
         System.out.println("Loading " + path);
         try {
@@ -70,16 +76,13 @@ public class PrologScript {
         }
     }
 
-    private Value solveOne(final Term term) {
+    public Engine.Result<Value> solveOne(final Rule rule, final Object... args) {
+        final Term term = rule.apply(args);
         final List<Term> values = solve(term);
         if (values.size() != 1) {
             throw Asserts.error("Exactly one solution expected for %s in %s%n  found: %d %s", V, term, values.size(), values);
         }
-        return Value.term(values.get(0));
-    }
-
-    public Value solveOne(final Rule rule, final Object... args) {
-        return solveOne(rule.apply(args));
+        return new Engine.Result<>(term.toString(), Value.convert(values.get(0)));
     }
 
     public void assertSuccess(final boolean expected, final Rule rule, final Object... args) {
@@ -87,18 +90,18 @@ public class PrologScript {
     }
 
     public void assertResult(final Object expected, final Rule f, final Object... args) {
-        final Term term = f.apply(args);
         if (expected != null) {
-            final Term converted = Value.convert(expected).toTerm();
-            final Term actual = solveOne(term).toTerm();
-            if (!converted.equals(actual)) {
-                throw Asserts.error("%s:%n  expected `%s`,%n    actual `%s`", term, converted, actual);
-            }
+            solveOne(f, args).assertEquals(Value.convert(expected));
         } else {
-            final List<Term> values = solve(term);
-            if (!values.isEmpty()) {
-                throw Asserts.error("No solutions expected for %s in %s%n  found: %d %s", V, term, values.size(), values);
-            }
+            solveNone(f, args);
+        }
+    }
+
+    private void solveNone(final Rule rule, final Object... args) {
+        final Term term = rule.apply(args);
+        final List<Term> values = solve(term);
+        if (!values.isEmpty()) {
+            throw Asserts.error("No solutions expected for %s in %s%n  found: %d %s", V, term, values.size(), values);
         }
     }
 }

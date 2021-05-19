@@ -17,17 +17,17 @@ public final class Selector {
 
     private final Class<?> owner;
     private final List<String> modes;
-    private final BiFunction<List<Consumer<Builder>>, Integer, BaseTester<?>> tester;
+    private final BiFunction<List<Consumer<Builder>>, Integer, BaseTester<?, ?>> tester;
     private final Map<String, List<Consumer<Builder>>> variants;
 
-    private Selector(final Class<?> owner, final List<String> modes, final BiFunction<List<Consumer<Builder>>, Integer, BaseTester<?>> tester, final Map<String, List<Consumer<Builder>>> variants) {
+    private Selector(final Class<?> owner, final List<String> modes, final BiFunction<List<Consumer<Builder>>, Integer, BaseTester<?, ?>> tester, final Map<String, List<Consumer<Builder>>> variants) {
         this.owner = owner;
         this.modes = modes;
         this.tester = tester;
         this.variants = variants;
     }
 
-    public Selector(final List<String> modes, final BiFunction<List<Consumer<Builder>>, Integer, BaseTester<?>> tester) {
+    public Selector(final List<String> modes, final BiFunction<List<Consumer<Builder>>, Integer, BaseTester<?, ?>> tester) {
         this(WALKER.getCallerClass(), modes, tester, new LinkedHashMap<>());
     }
 

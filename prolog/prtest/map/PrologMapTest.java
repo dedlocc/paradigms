@@ -3,6 +3,7 @@ package prtest.map;
 import base.TestCounter;
 import prtest.PrologTest;
 
+import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -18,7 +19,7 @@ public class PrologMapTest extends PrologTest {
     public PrologMapTest(
             final boolean updates,
             final boolean sorted,
-            final String file,
+            final Path file,
             final Function<PrologMapTest, MapChecker<?>> testFactory
     ) {
         super(file);
@@ -54,7 +55,7 @@ public class PrologMapTest extends PrologTest {
 
     public static <M> void test(
             final Class<?> type,
-            final String file,
+            final Path file,
             final boolean updates,
             final boolean sorted,
             final Consumer<MapChecker<M>> addTests,

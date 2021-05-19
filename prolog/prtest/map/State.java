@@ -53,7 +53,7 @@ public class State<M> {
 
     private void update(final Rule rule, final Object... args) {
         settings.log(rule.getName(), "(%s, V)", getArgs(args));
-        actual = test.solveOne(rule.bind(0, actual), args);
+        actual = test.solveOne(rule.bind(0, actual), args).value;
     }
 
     public <R> void assertRule(final Rule rule, final Function<NavigableMap<Integer, Value>, R> f, final Object... args) {

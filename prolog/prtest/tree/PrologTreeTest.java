@@ -7,6 +7,7 @@ import prtest.map.Entry;
 import prtest.map.MapChecker;
 import prtest.map.PrologMapTest;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -18,7 +19,7 @@ import java.util.function.Function;
  */
 public class PrologTreeTest {
     private static final Rule BUILD = Rule.func("map_build", 1);
-    public static String SOLUTION = "tree-map.pl";
+    public static Path SOLUTION = Path.of("tree-map.pl");
 
     public static void main(final String... args) {
         test(args, PrologTreeTest.class, test -> {});
@@ -45,6 +46,6 @@ public class PrologTreeTest {
     }
 
     private static Function<List<Entry>, Value> getListValueFunction(final PrologMapTest test) {
-        return entries -> test.solveOne(BUILD, Value.list(entries, Entry::toValue));
+        return entries -> test.solveOne(BUILD, Value.list(entries, Entry::toValue)).value;
     }
 }

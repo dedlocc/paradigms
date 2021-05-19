@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
@@ -13,6 +14,7 @@ public class Dialect {
     private final String constant;
     private final BiFunction<String, List<String>, String> nary;
     private final Map<String, String> aliases;
+    private Function<String, String> renamer = Function.identity();
 
     public Dialect(final String variable, final String constant, final BiFunction<String, List<String>, String> nary) {
         this(variable, constant, nary, new HashMap<>());
@@ -22,7 +24,7 @@ public class Dialect {
         this(
                 variable,
                 constant,
-                (op, args) -> operation.replace("op", op).replace("args", String.join(separator, args))
+                (op, args) -> operation.replace("{op}", op).replace("{args}", String.join(separator, args))
         );
     }
 
@@ -41,6 +43,11 @@ public class Dialect {
         return this;
     }
 
+    public Dialect renamer(final Function<String, String> renamer) {
+        this.renamer = renamer;
+        return this;
+    }
+
     public String variable(final String name) {
         return String.format(variable, name);
     }
@@ -54,6 +61,6 @@ public class Dialect {
     }
 
     public String operation(final String name, final List<String> as) {
-        return nary.apply(aliases.getOrDefault(name, name), as);
+        return nary.apply(renamer.apply(aliases.getOrDefault(name, name)), as);
     }
 }

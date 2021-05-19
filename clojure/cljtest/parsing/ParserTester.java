@@ -1,13 +1,8 @@
 package cljtest.parsing;
 
 import base.Randomized;
-import cljtest.ClojureScript;
 import cljtest.object.ObjectTester;
-import jstest.expression.AbstractTests;
-import jstest.expression.Builder;
-import jstest.expression.Dialect;
-import jstest.expression.Language;
-import jstest.expression.Selector;
+import jstest.expression.*;
 
 import java.util.List;
 import java.util.Set;
@@ -24,7 +19,7 @@ public class ParserTester {
 
         final Mode mode = mod == 1 ? Mode.INFIX : Mode.SUFFIX;
         final Language language = builder.dialect(ObjectTester.PARSED, mode.unparsed);
-        return new ObjectTester(language, false, mode.toString, mode.parse, spoiler(mode, builder.getTests()));
+        return new ObjectTester(language, false, mode.parse, mode.toString, spoiler(mode, builder.getTests()));
     });
 
     private static BiFunction<Randomized, String, String> spoiler(final Mode mode, final AbstractTests tests) {
@@ -41,8 +36,8 @@ public class ParserTester {
     }
 
     private enum Mode {
-        SUFFIX("toStringSuffix", "parseObjectSuffix", new Dialect("%s", "%s.0", "(args op)", " " )),
-        INFIX("toStringInfix", "parseObjectInfix", new Dialect(
+        SUFFIX("parseObjectSuffix", "toStringSuffix", new Dialect("%s", "%s.0", "({args} {op})", " " )),
+        INFIX("parseObjectInfix", "toStringInfix", new Dialect(
                 "%s",
                 "%s.0",
                 (op, args) -> {
@@ -54,13 +49,13 @@ public class ParserTester {
                 }
         ));
 
-        private final Dialect unparsed;
-        private final ClojureScript.F<String> toString;
         private final String parse;
+        private final String toString;
+        private final Dialect unparsed;
 
-        Mode(final String toString, final String parse, final Dialect unparsed) {
+        Mode(final String parse, final String toString, final Dialect unparsed) {
             this.unparsed = unparsed;
-            this.toString = ClojureScript.function(toString, String.class);
+            this.toString = toString;
             this.parse = parse;
         }
     }

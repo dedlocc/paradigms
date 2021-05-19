@@ -18,6 +18,7 @@ public class Diff {
     private final Dialect dialect;
     private final int min;
     private final int max;
+    public static final List<String> VARIABLES = List.of("x", "y", "z");
 
     public Diff(final int min, final int max, final Dialect dialect) {
         this.dialect = dialect;
@@ -25,16 +26,23 @@ public class Diff {
         this.max = max;
     }
 
-    private List<Engine.Result<String>> diff(final BaseTester<?> test, final Expr expr, final String parsed, final boolean simplify) {
-        final List<Engine.Result<String>> results = new ArrayList<>(3);
-        final List<String> variables = List.of("x", "y", "z");
-        for (int variable = 0; variable < 3; variable++) {
-            final String diff1 = dialect.operation("diff", List.of(parsed, dialect.variable(variables.get(variable))));
-            final String value = simplify ? dialect.operation("simplify", List.of(diff1)) : diff1;
-            System.out.println("Testing: " + value);
-            test.engine.parse(value);
+    public <X> void diff(final BaseTester<X, ?> tester) {
+        tester.addStage(() -> {
+            for (final Expr expr : tester.language.getTests()) {
+                diff(tester, expr, false);
+            }
+        });
+    }
 
-            results.add(test.engine.parsedToString());
+    private <X> List<Engine.Result<String>> diff(final BaseTester<X, ?> tester, final Expr expr, final boolean simplify) {
+        final List<Engine.Result<String>> results = new ArrayList<>(3);
+        for (int variable = 0; variable < 3; variable++) {
+            final String diff = dialect.operation("diff", List.of(expr.parsed, dialect.variable(VARIABLES.get(variable))));
+            final String value = simplify ? dialect.operation("simplify", List.of(diff)) : diff;
+            System.out.println("Testing: " + value);
+            final Engine.Result<X> expression = tester.engine.prepare(value);
+
+            results.add(tester.engine.toString(expression));
 
             final double di = variable == 0 ? D : 0;
             final double dj = variable == 1 ? D : 0;
@@ -49,7 +57,7 @@ public class Diff {
                                             expr.answer.applyAsDouble(i - di, j - dj, k - dk)) / D / 2;
                             if (Math.abs(expected) < EPS) {
                                 try {
-                                    test.evaluate(new double[]{i, j, k}, expected);
+                                    tester.evaluate(expression, new double[]{i, j, k}, expected);
                                 } catch (final AssertionError e) {
                                     System.err.format("d = %f%n", d);
                                     throw e;
@@ -63,16 +71,7 @@ public class Diff {
         return results;
     }
 
-    public void diff(final BaseTester<?> test) {
-        test.addStage(() -> {
-            for (final Expr expr : test.language.getTests()) {
-                diff(test, expr, expr.parsed, false);
-                diff(test, expr, test.parse(expr.unparsed), false);
-            }
-        });
-    }
-
-    public void simplify(final BaseTester<?> tester) {
+    public <X> void simplify(final BaseTester<X, ?> tester) {
         tester.addStage(() -> {
             final List<int[]> newSimplifications = new ArrayList<>();
             final List<int[]> simplifications = tester.language.getSimplifications();
@@ -81,7 +80,7 @@ public class Diff {
             for (int i = 0; i < simplifications.size(); i++) {
                 final Expr expr = tests.get(i);
                 final int[] expected = simplifications.get(i);
-                final List<Engine.Result<String>> actual = diff(tester, expr, tester.parse(expr.unparsed), true);
+                final List<Engine.Result<String>> actual = diff(tester, expr, true);
                 if (expected != null) {
                     for (int j = 0; j < expected.length; j++) {
                         final Engine.Result<String> result = actual.get(j);

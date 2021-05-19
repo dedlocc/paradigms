@@ -6,6 +6,7 @@ import prtest.PrologTest;
 import prtest.PrologUtil;
 import prtest.Rule;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collections;
@@ -37,7 +38,7 @@ public class PrologPrimesTest extends PrologTest {
     public final boolean reversible;
 
     private PrologPrimesTest(final int max, final boolean reversible, final Consumer<PrologPrimesTest> check) {
-        super("primes" + SUFFIX);
+        super(Path.of("primes" + SUFFIX));
 
         this.max = max;
         this.reversible = reversible;

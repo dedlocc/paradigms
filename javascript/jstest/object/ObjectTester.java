@@ -3,22 +3,21 @@ package jstest.object;
 import jstest.Engine;
 import jstest.JSTester;
 import jstest.expression.*;
+import jstest.functional.ExpressionTest;
 
 import java.nio.file.Path;
 import java.util.List;
-
-import static jstest.functional.ExpressionTest.POLISH;
 
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class ObjectTester extends JSTester {
-    public static final Dialect OBJECT = new Dialect("new Variable('%s')", "new Const(%s)", "new op(args)", ", ")
+    public static final Dialect OBJECT = new Dialect("new Variable('%s')", "new Const(%s)", "new {op}({args})", ", ")
             .renamed("+", "Add", "-", "Subtract", "*", "Multiply", "/", "Divide", "negate", "Negate");
 
     static final Selector SELECTOR = new Selector(List.of("easy", "", "hard", "bonus"), (variant, mode) -> {
         final Builder builder = new Builder(false, variant);
-        final Language language = builder.dialect(OBJECT, POLISH);
+        final Language language = builder.dialect(OBJECT, ExpressionTest.POLISH);
         return new ObjectTester(mode, language, "toString", "parse");
     });
 
@@ -39,16 +38,10 @@ public class ObjectTester extends JSTester {
     }
 
     @Override
-    protected void test(final String parsed, final String unparsed) {
-        testToString(parsed, unparsed);
-        testToString(addSpaces(parsed, random), unparsed);
-    }
-
-    private void testToString(final String expression, final String expected) {
+    protected void test(final Engine.Result<Object> prepared, final String unparsed) {
         counter.nextTest();
-        engine.parse(expression);
-        final Engine.Result<String> result = engine.parsedToString();
-        assertEquals(result.context, expected, result.value);
+        engine.toString(prepared).assertEquals(unparsed);
         counter.passed();
     }
+
 }

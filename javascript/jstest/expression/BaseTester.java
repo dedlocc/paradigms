@@ -11,9 +11,10 @@ import java.util.function.ToDoubleFunction;
  * @author Niyaz Nigmatullin
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
-public abstract class BaseTester<E extends Engine> extends BaseTest {
+public abstract class BaseTester<X, E extends Engine<X>> extends BaseTest {
     public static final int N = 5;
     public static final double EPS = 1e-3;
+    public static int TESTS = 444;
 
     protected final E engine;
     /*package*/ final Language language;
@@ -48,36 +49,37 @@ public abstract class BaseTester<E extends Engine> extends BaseTest {
     @Override
     protected void test() {
         for (final Expr test : language.getTests()) {
-            test(test.parsed, test.answer, test.unparsed);
+            test(engine.prepare(test.parsed), test.answer, test.unparsed);
             if (testParsing) {
                 test(parse(test.unparsed), test.answer, test.unparsed);
                 test(parse(addSpaces(test.unparsed, random)), test.answer, test.unparsed);
             }
         }
 
-        testRandom(444);
+        testRandom(TESTS);
         stages.forEach(Runnable::run);
     }
 
-    public abstract String parse(final String expression);
+    public Engine.Result<X> parse(final String expression) {
+        return engine.parse(expression);
+    }
 
-    protected void test(final String expression, final Func f, final String unparsed) {
-        System.out.println("Testing: " + expression);
+    protected void test(final Engine.Result<X> prepared, final Func f, final String unparsed) {
+        System.out.println("Testing: " + prepared);
 
-        engine.parse(expression);
         for (double i = 0; i <= N; i++) {
             for (double j = 0; j <= N; j++) {
                 for (double k = 0; k <= N; k++) {
                     final double[] vars = new double[]{i, j, k};
-                    evaluate(vars, f.applyAsDouble(vars));
+                    evaluate(prepared, vars, f.applyAsDouble(vars));
                 }
             }
         }
 
-        test(expression, unparsed);
+        test(prepared, unparsed);
     }
 
-    protected void test(final String parsed, final String unparsed) {
+    protected void test(final Engine.Result<X> prepared, final String unparsed) {
     }
 
     public void testRandom(final int n) {
@@ -88,29 +90,29 @@ public abstract class BaseTester<E extends Engine> extends BaseTest {
             }
             final double[] vars = random.doubles().limit(language.getVariables().size()).toArray();
 
-            final Expr test = this.language.randomTest(i);
+            final Expr test = language.randomTest(i);
             final double answer = test.answer.applyAsDouble(vars);
 
-            engine.parse(test.parsed);
-            evaluate(vars, answer);
-            test(test.parsed, test.unparsed);
-            test(addSpaces(test.parsed, random), test.unparsed);
+            final Engine.Result<X> prepared = engine.prepare(test.parsed);
+            test(prepared, vars, test, answer);
             if (testParsing) {
                 counter.nextTest();
-                final String expr = parse(test.unparsed);
-                test(expr, test.unparsed);
-
-                engine.parse(expr);
-                evaluate(vars, answer);
+                test(parse(test.unparsed), vars, test, answer);
+                test(parse(addSpaces(test.unparsed, random)), vars, test, answer);
                 counter.passed();
             }
         }
     }
 
-    public void evaluate(final double[] vars, final double answer) {
+    public void test(final Engine.Result<X> prepared, final double[] vars, final Expr test, final double answer) {
+        evaluate(prepared, vars, answer);
+        test(prepared, test.unparsed);
+    }
+
+    public void evaluate(final Engine.Result<X> prepared, final double[] vars, final double expected) {
         counter.nextTest();
-        final Engine.Result<Number> result = engine.evaluate(vars);
-        assertEquals(result.context, EPS, answer, result.value.doubleValue());
+        final Engine.Result<Number> result = engine.evaluate(prepared, vars);
+        assertEquals(result.context, EPS, expected, result.value.doubleValue());
         counter.passed();
     }
 

@@ -12,10 +12,10 @@ import java.nio.file.Path;
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
  */
 public class ExpressionTest {
-    public static final Dialect ARITHMETIC = new Dialect("variable('%s')", "cnst(%s)", "op(args)", ", ")
+    public static final Dialect ARITHMETIC = new Dialect("variable('%s')", "cnst(%s)", "{op}({args})", ", ")
                     .renamed("+", "add", "-", "subtract", "/", "divide", "*", "multiply");
 
-    public static final Dialect POLISH = new Dialect("%s", "%s", "args op", " ");
+    public static final Dialect POLISH = new Dialect("%s", "%s", "{args} {op}", " ");
     private static final Path SCRIPT = Path.of("functionalExpression.js");
 
     static JSTester tester(final Language language, final boolean testParsing) {

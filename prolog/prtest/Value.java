@@ -7,6 +7,7 @@ import base.Asserts;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -37,6 +38,23 @@ public final class Value {
         return result;
     }
 
+    public Number toNumber(final String context) {
+        return cast(context, alice.tuprolog.Number.class, alice.tuprolog.Number::doubleValue);
+    }
+
+    public String toString(final String context) {
+        return cast(context, Struct.class, Struct::getName);
+    }
+
+    private <T, R> R cast(final String context, final Class<T> type, final Function<T, R> convert) {
+        try {
+            return convert.apply(type.cast(term));
+        } catch (final ClassCastException e) {
+            throw Asserts.error(context, "Expected %s, found %s", type.getSimpleName(), term.getClass().getSimpleName());
+        }
+    }
+
+
     @Override
     public String toString() {
         return term.toString();
@@ -57,20 +75,32 @@ public final class Value {
     }
 
     public static Value convert(final Object term) {
-        if (term instanceof Value) {
+        if (term.getClass() == Value.class) {
             return (Value) term;
+        } else if (term.getClass() == Integer.class || term.getClass() == Long.class) {
+            return term(Int.of((Number) term));
+        } else if (term.getClass() == Float.class || term.getClass() == Double.class) {
+            return term(alice.tuprolog.Double.of((Number) term));
+        } else if (term.getClass() == String.class) {
+            return new Value(Struct.atom((String) term));
         } else if (term instanceof Term) {
             return term((Term) term);
         } else if (term instanceof List) {
             return list((List<?>) term, Value::convert);
         } else if (term instanceof Map.Entry) {
-            final Map.Entry<?, ?> entry = (Map.Entry<?, ?>) term;
-            return Value.struct(",", convert(entry.getKey()), convert(entry.getValue()));
-        } else if (term instanceof Integer || term instanceof Long) {
-            return term(Int.of((Number) term));
+            return entry((Map.Entry<?, ?>) term);
+        } else if (term instanceof Map) {
+            final List<Value> items = ((Map<?, ?>) term).entrySet().stream()
+                    .map(Value::entry)
+                    .collect(Collectors.toList());
+            return list(items, Function.identity());
         } else {
             throw new AssertionError("Cannot convert `" + term + "` of type " + term.getClass().getName() + " to Term");
         }
+    }
+
+    private static Value entry(final Map.Entry<?, ?> entry) {
+        return Value.struct(",", convert(entry.getKey()), convert(entry.getValue()));
     }
 
     public static <T> Value list(final List<? extends T> items, final Function<? super T, Value> convert) {

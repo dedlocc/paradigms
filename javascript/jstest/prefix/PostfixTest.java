@@ -10,7 +10,7 @@ import static jstest.expression.Operations.*;
  */
 public class PostfixTest {
     private static final Selector SELECTOR = Kind.selector(
-            "postfix", "parsePostfix", new Dialect("%s", "%s", "(args op)", " "),
+            "postfix", "parsePostfix", new Dialect("%s", "%s", "({args} {op})", " "),
             "Empty input", "",
             "Unknown variable", "a",
             "Invalid number", "-a",

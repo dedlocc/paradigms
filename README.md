@@ -18,6 +18,10 @@
     * Код должен находиться в файле `prolog-solutions/primes.pl`.
     * [Исходный код тестов](prolog/prtest/primes/PrologPrimesTest.java)
         * Запускать c аргументом `easy`, `hard` или `bonus`
+ * *Square* (32-33)
+    * Добавьте правило `square_divisors(N, D)`, возвращающее делители N²:
+      `square_divisors(6, [2, 2, 3, 3])`.
+    * [Исходный код тестов](prolog/prtest/primes/PrologSquareTest.java)
 
 Для запуска тестов можно использовать скрипты
 [TestProlog.cmd](prolog/TestProlog.cmd) и [TestProlog.sh](prolog/TestProlog.sh)

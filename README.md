@@ -31,6 +31,10 @@
       подсчитывающее НОД(`A`, `B`) через разложение на простые множители:
       `gcd(4, 6, 2)`.
     * [Исходный код тестов](prolog/prtest/primes/PrologGcdTest.java)
+ * *Index* (38-39)
+    * Добавьте правило `prime_index(P, N)`, подсчитывающее номер простого числа:
+        `prime_index(2, 1)`, `prime_index(101, 26)`
+    * [Исходный код тестов](prolog/prtest/primes/PrologIndexTest.java)
 
 Для запуска тестов можно использовать скрипты
 [TestProlog.cmd](prolog/TestProlog.cmd) и [TestProlog.sh](prolog/TestProlog.sh)

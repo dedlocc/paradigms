@@ -26,6 +26,11 @@
     * Добавьте правило `power_divisors(N, I, D)`, возвращающее делители Nⁱ:
       `power_divisors(6, 2, [2, 2, 3, 3])`.
     * [Исходный код тестов](prolog/prtest/primes/PrologPowerTest.java)
+ * *Gcd* (36-37)
+    * Добавьте правило `gcd(A, B, GCD)`,
+      подсчитывающее НОД(`A`, `B`) через разложение на простые множители:
+      `gcd(4, 6, 2)`.
+    * [Исходный код тестов](prolog/prtest/primes/PrologGcdTest.java)
 
 Для запуска тестов можно использовать скрипты
 [TestProlog.cmd](prolog/TestProlog.cmd) и [TestProlog.sh](prolog/TestProlog.sh)

@@ -52,9 +52,9 @@ simplify_bin_(bin(add, A, const(0)), A).
 simplify_bin_(bin(sub, A, const(0)), A).
 simplify_bin_(bin(mul, const(1), A), A).
 simplify_bin_(bin(mul, A, const(1)), A).
-simplify_bin_(bin(mul, const(0), A), const(0)).
-simplify_bin_(bin(mul, A, const(0)), const(0)).
-simplify_bin_(bin(div, const(0), A), const(0)).
+simplify_bin_(bin(mul, const(0), _), const(0)).
+simplify_bin_(bin(mul, _, const(0)), const(0)).
+simplify_bin_(bin(div, const(0), _), const(0)).
 
 simplify_bin(E, R) :- simplify_bin_(E, R), !.
 simplify_bin(E, E).

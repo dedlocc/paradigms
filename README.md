@@ -2,6 +2,14 @@
 
 [Условия домашних заданий](http://www.kgeorgiy.info/courses/paradigms/homeworks.html)
 
+## Домашнее задание 14. Разбор выражений на Prolog
+
+Модификации
+ * *Base*
+    * Код должен находиться в файле `prolog-solutions/expression.pl`.
+    * [Исходный код тестов](prolog/prtest/parsing/ParserTest.java)
+        * Запускать c указанием модификации и сложности (`easy` или `hard`).
+
 ## Домашнее задание 13. Дерево поиска на Prolog
 
 Модификации

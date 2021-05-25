@@ -63,6 +63,11 @@
  * [Задача Эйнштейна](prolog/examples/2_2_einstein.pl)
  * [Арифметические выражения](prolog/examples/2_3_expressions.pl)
 
+Лекция 3. Преобразование в строку и разбор
+ * [Преобразование через термы](prolog/examples/3_1_terms.pl)
+ * [Преобразование через списки](prolog/examples/3_2_chars.pl)
+ * [Грамматики](prolog/examples/3_3_grammar.pl)
+
 
 ## Домашнее задание 11. Комбинаторные парсеры
 

@@ -15,13 +15,13 @@
 (def avg (op average))
 
 (def parseFunction
-  (parser
+  (simple-parser
     constant
     variable
-    {'+ add
-     '- subtract
-     '* multiply
-     '/ divide
+    {'+      add
+     '-      subtract
+     '*      multiply
+     '/      divide
      'negate negate
-     'sum sum
-     'avg avg}))
+     'sum    sum
+     'avg    avg}))

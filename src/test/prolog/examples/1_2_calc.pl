@@ -1,4 +1,8 @@
-% Recursive Fibonacci numbers
+%%%%%%%%%%%%%%
+% Вычисления %
+%%%%%%%%%%%%%%
+
+% Рекурсивное вычисление чисел Фибоначчи
 
 fib(1, 1).
 fib(2, 1).
@@ -19,7 +23,8 @@ fib(N, R) :-
    R / 832040
 */
 
-% Fibonacci numbers with accumulating parameters
+
+% Итеративное вычисление чисел Фибоначчи
 
 fib_acc(N, R) :- fib_acc_rec(N, 1, 1, R).
 
@@ -45,7 +50,7 @@ fib_acc_rec(N, A, B, R) :-
 */
 
 
-% Memoized Fibonacci numbers
+% Мемоизация вычислений чисел Фибоначчи
 
 fib_mem(N, R) :- fib_table(N, R), !. % Read from table
 fib_mem(1, 1).
@@ -72,7 +77,7 @@ fib_mem(N, R) :-
 
 
 
-% Exponentiation
+% Рекурсивное возведение в степень
 
 power(0, _, 0).
 power(_, 0, 1).
@@ -97,7 +102,8 @@ power(A, B, R) :-
    R / 1
 */
 
-% Fast exponentiation
+
+% Быстрое возведение в степень
 
 fast_power(_, 0, 1).
 fast_power(A, B, R) :-
@@ -125,12 +131,12 @@ fast_power(A, B, R) :-
 */
 
 
-% Reversible computations
+% Обратимые вычисления
 /*
 ?- R is 2 + 3.
    5
 ?- 5 is 2 + R.
-  Error: Type error in argument 2 of is(5,'+'(2,R_e0))
+   Error: Type error in argument 2 of is(5,'+'(2,R_e0))
 */
 
 inc(N, R) :- number(N), !, R is N + 1.

@@ -18,7 +18,7 @@ public class Rule {
         this(name, new Object[arity], IntStream.range(0, arity));
     }
 
-    public Rule(final String name, final Object[] args, final IntStream indices) {
+    private Rule(final String name, final Object[] args, final IntStream indices) {
         this.name = name;
         this.args = args;
         this.indices = indices.toArray();
@@ -47,7 +47,7 @@ public class Rule {
         return bind(index, PrologScript.V);
     }
 
-    public Term apply(final Object[] args) {
+    public Term apply(final Object... args) {
         Asserts.assertEquals("arity", indices.length, args.length);
 
         for (int i = 0; i < indices.length; i++) {

@@ -61,4 +61,8 @@ public class Asserts {
     public static AssertionError error(final String format, final Object... args) {
         return new AssertionError(String.format(format, args));
     }
+
+    public static AssertionError error(final String context, final String format, final Object... args) {
+        return new AssertionError(context + "\n" + String.format(format, args));
+    }
 }

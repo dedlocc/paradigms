@@ -86,8 +86,8 @@ public class MainChecker implements Randomized {
         counter.passed();
     }
 
-    public void printStatus(final Class<?> clazz) {
-        counter.printStatus(clazz);
+    public void printStatus(final Class<?> clazz, final String... args) {
+        counter.printStatus(clazz, args);
     }
     public void printStatus() {
         printStatus(getClass());

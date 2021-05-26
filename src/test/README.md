@@ -2,13 +2,48 @@
 
 [Условия домашних заданий](http://www.kgeorgiy.info/courses/paradigms/homeworks.html)
 
-## Домашнее задание X. Простые числа на Prolog
+## Домашнее задание 13. Дерево поиска на Prolog
+
+Модификации
+ * *Базовая*
+    * Код должен находиться в файле `prolog-solutions/tree-map.pl`.
+    * [Исходный код тестов](prolog/prtest/tree/PrologTreeTest.java)
+        * Запускать c аргументом `easy` или `hard`
+ * *Contains* (32-33)
+    * Добавьте правила:
+        * `map_containsKey(Map, Key)`, проверяющее наличие ключа в дереве;
+        * `map_containsValue(Map, Value)`, проверяющее наличие значения в дереве.
+    * [Исходный код тестов](prolog/prtest/tree/PrologTreeContainsTest.java)
+ * *KeysValues* (34-35)
+    * Добавьте правила:
+        * `map_Keys(Map, Keys)`, возвращающее ключи в порядке возрастания;
+        * `map_Values(Map, Values)`, возвращающее значения в порядке возрастания ключей.
+
+
+## Домашнее задание 12. Простые числа на Prolog
 
 Модификации
  * *Базовая*
     * Код должен находиться в файле `prolog-solutions/primes.pl`.
     * [Исходный код тестов](prolog/prtest/primes/PrologPrimesTest.java)
         * Запускать c аргументом `easy`, `hard` или `bonus`
+ * *Square* (32-33)
+    * Добавьте правило `square_divisors(N, D)`, возвращающее делители N²:
+      `square_divisors(6, [2, 2, 3, 3])`.
+    * [Исходный код тестов](prolog/prtest/primes/PrologSquareTest.java)
+ * *Power* (34-35)
+    * Добавьте правило `power_divisors(N, I, D)`, возвращающее делители Nⁱ:
+      `power_divisors(6, 2, [2, 2, 3, 3])`.
+    * [Исходный код тестов](prolog/prtest/primes/PrologPowerTest.java)
+ * *Gcd* (36-37)
+    * Добавьте правило `gcd(A, B, GCD)`,
+      подсчитывающее НОД(`A`, `B`) через разложение на простые множители:
+      `gcd(4, 6, 2)`.
+    * [Исходный код тестов](prolog/prtest/primes/PrologGcdTest.java)
+ * *Index* (38-39)
+    * Добавьте правило `prime_index(P, N)`, подсчитывающее номер простого числа:
+        `prime_index(2, 1)`, `prime_index(101, 26)`
+    * [Исходный код тестов](prolog/prtest/primes/PrologIndexTest.java)
 
 Для запуска тестов можно использовать скрипты
 [TestProlog.cmd](prolog/TestProlog.cmd) и [TestProlog.sh](prolog/TestProlog.sh)
@@ -26,10 +61,16 @@
  * [Windows](prolog/RunProlog.cmd)
  * [*nix](prolog/RunProlog.sh)
 
-Лекция 1. Введение в Prolog
+Лекция 1. Факты, правила и вычисления
  * [Учебный план](prolog/examples/1_1_plan.pl)
  * [Вычисления](prolog/examples/1_2_calc.pl)
  * [Списки](prolog/examples/1_3_lists.pl)
+ * [Правила высшего порядка](prolog/examples/1_4_high-order.pl)
+
+Лекция 2. Задачи, унификация и объекты
+ * [Задача о расстановке ферзей](prolog/examples/2_1_queens.pl)
+ * [Задача Эйнштейна](prolog/examples/2_2_einstein.pl)
+ * [Арифметические выражения](prolog/examples/2_3_expressions.pl)
 
 
 ## Домашнее задание 11. Комбинаторные парсеры
@@ -37,71 +78,81 @@
 Модификации
  * *Базовая*
     * Код должен находиться в файле `clojure-solutions/expression.clj`.
-    * [Исходный код тестов](clojure/cljtest/parsing/ClojureObjectParsingTest.java)
-        * Запускать c аргументом `easy` или `hard`
+    * [Исходный код тестов](clojure/cljtest/parsing/ParserTest.java)
+        * Запускать c указанием модификации и сложности (`easy` или `hard`).
  * *Variables* (32-33). Дополнительно реализовать поддержку:
     * Переменных, состоящих из произвольного количества букв `XYZ` в любом регистре
         * Настоящее имя переменной определяется первой буквой ее имени
-    * [Исходный код тестов](clojure/cljtest/parsing/ClojureVariablesParsingTest.java)
+ * *Boolean* (34-35). Сделать модификацию *Variables* и дополнительно реализовать поддержку:
+    * Булевских операций
+        * Аргументы: число больше 0 → `true`, иначе → `false`
+        * Результат: `true` → 1, `false` → 0
+        * `And` (`&&`) – и: `5 & -6` равно 0
+        * `Or`  (`||`) - или: `5 & -6` равно 1
+        * `Xor` (`^^`) - исключающее или: `5 ^ -6` равно 1
+        * операции по увеличению приоритета: `^^`, `||`, `&&`, операции базовой модификации
+ * *PowLog* (36-37). Сделать модификацию *Variables* и дополнительно реализовать поддержку:
+    * Бинарных правоассоциативных операций максимального приоритета:
+        * `IPow` (`**`) – возведения в степень:
+            `4 ** 3 ** 2` равно `4 ** (3 ** 2)` равно 262144
+        * `ILog` (`//`) – взятия логарифма:
+            `8 // 9 // 3` равно `8 // (9 // 3)` равно 3
+ * *ImplIff* (38-39). Сделать модификацию *Boolean* и дополнительно реализовать поддержку:
+    * Булевских операций
+        * `Impl` (`->`) – импликация (правоассоциативна): `-4 -> 1` равно 1
+        * `Iff`  (`<->`) - тогда и только тогда: `2 <-> 6` равно 1
+        * операции по увеличению приоритета: `<->`, `->`, операции модификации *Boolean*
 
 
 ## Домашнее задание 10. Объектные выражения на Clojure
 
 Модификации
- * *Базовая*
+ * *Base*
     * Код должен находиться в файле `clojure-solutions/expression.clj`.
-    * [Исходный код тестов](clojure/cljtest/object/ClojureObjectExpressionTest.java)
-        * Запускать c аргументом `easy` или `hard`
+    * [Исходный код тестов](clojure/cljtest/object/ObjectTest.java)
+        * Запускать c указанием модификации и сложности (`easy` или `hard`).
  * *SinCos* (32-33). Дополнительно реализовать поддержку:
     * унарных операций:
         * `Sin` (`sin`) – синус, `(sin 4846147)` примерно равно 1;
         * `Cos` (`cos`) – косинус, `(cos 5419351)` примерно равно 1.
-    * [Исходный код тестов](clojure/cljtest/object/ClojureObjectSinCosTest.java)
  * *SinhCosh* (34-35). Дополнительно реализовать поддержку:
     * унарных операций:
         * `Sinh` (`sinh`) – гиперболический синус, `(sinh 3)` немного больше 10;
         * `Cosh` (`cosh`) – гиперболический косинус, `(cosh 3)` немного меньше 10.
-    * [Исходный код тестов](clojure/cljtest/object/ClojureObjectSinhCoshTest.java)
  * *SumAvg* (36-37). Дополнительно реализовать поддержку:
     * операций произвольного числа аргументов:
         * `Sum` (`sum`) – сумма, `(sum 1 2 3)` равно 6;
         * `Avg` (`avg`) – арифметическое среднее, `(avg 1 2 3)` равно 2;
-    * [Исходный код тестов](clojure/cljtest/object/ClojureObjectSumAvgTest.java)
  * *Means* (38-39). Дополнительно реализовать поддержку:
     * операций произвольного числа аргументов:
         * `ArithMean` (`arith-mean`) – арифметическое среднее `(arith-mean 1 2 6)` равно 3;
         * `GeomMean` (`geom-mean`) – геометрическое среднее `(geom-mean 1 2 4)` равно 2;
         * `HarmMean` (`harm-mean`) – гармоническое среднее, `(harm-mean 2 3 6)` равно 3;
-    * [Исходный код тестов](clojure/cljtest/object/ClojureObjectMeansTest.java)
 
 
 ## Домашнее задание 9. Функциональные выражения на Clojure
 
 Модификации
- * *Базовая*
+ * *Base*
     * Код должен находиться в файле `clojure-solutions/expression.clj`.
-    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalExpressionTest.java)
-        * Запускать c аргументом `easy` или `hard`
+    * [Исходный код тестов](clojure/cljtest/functional/FunctionalTest.java)
+        * Запускать c указанием модификации и сложности (`easy` или `hard`).
  * *SinCos* (32-33). Дополнительно реализовать поддержку:
     * унарных операций:
         * `sin` – синус, `(sin 4846147)` примерно равно 1;
         * `cos` – косинус, `(cos 5419351)` примерно равно 1.
-    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalSinCosTest.java)
  * *SinhCosh* (34-35). Дополнительно реализовать поддержку:
     * унарных операций:
         * `sinh` – гиперболический синус, `(sinh 3)` немного больше 10;
         * `cosh` – гиперболический косинус, `(cosh 3)` немного меньше 10.
-    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalSinhCoshTest.java)
  * *SumAvg* (36-37). Дополнительно реализовать поддержку:
     * операций произвольного числа аргументов:
         * `sum` – сумма, `(sum 1 2 3)` равно 6;
         * `avg` – среднее, `(avg 1 2 3)` равно 2;
-    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalSumAvgTest.java)
  * *MeanVarn* (38-39). Дополнительно реализовать поддержку:
     * операций произвольного числа аргументов:
         * `mean` – математическое ожидание аргументов, `(mean 1 2 6)` равно 3;
         * `varn` – дисперсия аргументов, `(varn 2 5 11)` равно 14;
-    * [Исходный код тестов](clojure/cljtest/functional/ClojureFunctionalMeanVarnTest.java)
 
 
 ## Домашнее задание 8. Линейная алгебра на Clojure
@@ -116,13 +167,13 @@
     * Добавьте операции поэлементного сложения (`c+`),
         вычитания (`c-`), умножения (`c*`) и деления (`cd`) кубоидов.
         Например, `(с+ [[[1] [2]] [[3] [4]]] [[[5] [6]] [[7] [8]]])` должно быть равно `[[[6] [8]] [[10] [12]]]`.
-    * [Исходный код тестов](clojure/cljtest/linear/LinearCuboidTest.java)
+    * [Исходный код тестов](clojure/cljtest/linear/CuboidTest.java)
  * *Tensor* (34-35)
     * Назовем _тензором_ многомерную прямоугольную таблицу чисел.
     * Добавьте операции поэлементного сложения (`t+`),
         вычитания (`t-`) и умножения (`t*`) тензоров.
         Например, `(t+ [[1 2] [3 4]] [[5 6] [7 8]])` должно быть равно `[[6 8] [10 12]]`.
-    * [Исходный код тестов](clojure/cljtest/linear/LinearTensorTest.java)
+    * [Исходный код тестов](clojure/cljtest/linear/TensorTest.java)
  * *Simplex* (36-37)
     * Назовем _симплексом_ многомерную таблицу чисел, 
       такую что для некоторого `n` в ней существуют все значения
@@ -130,7 +181,7 @@
     * Добавьте операции поэлементного сложения (`x+`),
         вычитания (`x-`) и умножения (`x*`) симплексов.
         Например, `(x+ [[1 2] [3]] [[5 6] [7]])` должно быть равно `[[6 8] [10]]`.
-    * [Исходный код тестов](clojure/cljtest/linear/LinearSimplexTest.java)
+    * [Исходный код тестов](clojure/cljtest/linear/SimplexTest.java)
  * *Broadcast* (38-39)
     * Назовем _тензором_ многомерную прямоугольную таблицу чисел.
     * _Форма_ тензора – последовательность чисел
@@ -157,7 +208,7 @@
       должны быть предварительно распространены до тензоров большей размерности.
       Например, `(tb+ 1 [[10 20 30] [40 50 60]] [100 200])` 
       должно быть равно `[[111 121 131] [241 251 261]]`.
-    * [Исходный код тестов](clojure/cljtest/linear/LinearBroadcastTest.java)
+    * [Исходный код тестов](clojure/cljtest/linear/BroadcastTest.java)
 
 
 Для запуска тестов можно использовать скрипты
@@ -217,62 +268,58 @@
 ## Домашнее задание 7. Обработка ошибок на JavaScript
 
 Модификации
- * *Базовая*
+ * *Base*
     * Код должен находиться в файле `javascript-solutions/objectExpression.js`.
-    * [Исходный код тестов](javascript/jstest/prefix/PrefixParserTest.java)
-        * Запускать c аргументом `easy` или `hard`
- * *PrefixSinhCosh* (32-33). Дополнительно реализовать поддержку:
+    * [Исходный код тестов](javascript/jstest/prefix/ParserTest.java)
+        * Запускать c указанием модификации и сложности (`easy` или `hard`).
+ * *Prefix*: *SinhCosh* (32-33). Дополнительно реализовать поддержку:
     * унарных операций:
         * `Sinh` (`sinh`) – гиперболический синус, `(sinh 3)` немного больше 10;
         * `Cosh` (`cosh`) – гиперболический косинус, `(cosh 3)` немного меньше 10;
-    * [Исходный код тестов](javascript/jstest/prefix/PrefixSinhCoshTest.java)
- * *PrefixMeans* (34-35). Дополнительно реализовать поддержку:
+    * [Исходный код тестов](javascript/jstest/prefix/PrefixTest.java)
+ * *Prefix*: *Means* (34-35). Дополнительно реализовать поддержку:
     * операций произвольного числа аргументов:
         * `ArithMean` (`arith-mean`) – арифметическое среднее `(arith-mean 1 2 6)` равно 3;
         * `GeomMean` (`geom-mean`) – геометрическое среднее `(geom-mean 1 2 4)` равно 2;
         * `HarmMean` (`harm-mean`) – гармоническое среднее, `(harm-mean 2 3 6)` равно 3;
-    * [Исходный код тестов](javascript/jstest/prefix/PrefixMeansTest.java)
- * *PostfixSumsqLength* (36-37). Дополнительно реализовать поддержку:
+    * [Исходный код тестов](javascript/jstest/prefix/PrefixTest.java)
+ * *Postfix*: *SumsqLength* (36-37). Дополнительно реализовать поддержку:
     * выражений в постфиксной записи: `(2 3 +)` равно 5
     * операций произвольного числа аргументов:
         * `Sumsq` (`sumsq`) – сумма квадратов, `(1 2 3 sumsq)` равно 14;
         * `Length` (`length`у) – длина вектора, `(3 4 length)` равно 5;
-    * [Исходный код тестов](javascript/jstest/prefix/PostfixSumsqLengthTest.java)
- * *PostfixMeans* (38-39). Дополнительно реализовать поддержку:
+    * [Исходный код тестов](javascript/jstest/prefix/PostfixTest.java)
+ * *Postfix*: *Means* (38-39). Дополнительно реализовать поддержку:
     * операций произвольного числа аргументов:
         * `ArithMean` (`arith-mean`) – арифметическое среднее `(arith-mean 1 2 6)` равно 3;
         * `GeomMean` (`geom-mean`) – геометрическое среднее `(geom-mean 1 2 4)` равно 2;
         * `HarmMean` (`harm-mean`) – гармоническое среднее, `(harm-mean 2 3 6)` равно 3;
-    * [Исходный код тестов](javascript/jstest/prefix/PostfixMeansTest.java)
+    * [Исходный код тестов](javascript/jstest/prefix/PostfixTest.java)
 
 
 ## Домашнее задание 6. Объектные выражения на JavaScript
 
 Модификации
- * *Базовая*
+ * *Base*
     * Код должен находиться в файле `javascript-solutions/objectExpression.js`.
-    * [Исходный код тестов](javascript/jstest/object/ObjectExpressionTest.java)
-        * Запускать c аргументом `easy`, `hard` или `bonus`.
+    * [Исходный код тестов](javascript/jstest/object/ObjectTest.java)
+        * Запускать c указанием модификации и сложности (`easy`, `hard` или `bonus`).
  * *ArcTan* (32, 33). Дополнительно реализовать поддержку:
     * функций:
         * `ArcTan` (`atan`) – арктангенс, `1256 atan` примерно равно 1.57;
         * `ArcTan2` (`atan2`) – арктангенс, `841 540 atan2` примерно равно 1;
-    * [Исходный код тестов](javascript/jstest/object/ObjectArcTanTest.java)
  * *AvgMed* (34, 35). Дополнительно реализовать поддержку:
     * функций:
         * `Avg5` (`avg5`) – арифметическое среднее пяти аргументов, `1 2 3 4 5 avg5` равно 3;
         * `Med3` (`med3`) – медиана трех аргументов, `1 2 -10 med3` равно 1.
-    * [Исходный код тестов](javascript/jstest/object/ObjectAvgMedTest.java)
  * *Cube* (36, 37). Дополнительно реализовать поддержку:
     * унарных функций:
         * `Cube` (`cube`) – возведение в куб, `3 cube` равно 27;
         * `Cbrt` (`cbrt`) – извлечение кубического корня, `-27 cbrt` равно −3;
-    * [Исходный код тестов](javascript/jstest/object/ObjectCubeTest.java)
  * *Harmonic* (38, 39). Дополнительно реализовать поддержку:
     * функций от двух аргументов:
         * `Hypot` (`hypot`) – квадрат гипотенузы, `3 4 hypot` равно 25;
         * `HMean` (`hmean`) – гармоническое среднее, `5 20 hmean` равно 8;
-    * [Исходный код тестов](javascript/jstest/object/ObjectHarmonicTest.java)
 
 
 ## Домашнее задание 5. Функциональные выражения на JavaScript
@@ -280,22 +327,22 @@
 Модификации
  * *Базовая*
     * Код должен находиться в файле `javascript-solutions/functionalExpression.js`.
-    * [Исходный код тестов](javascript/jstest/functional/FunctionalExpressionTest.java)
+    * [Исходный код тестов](javascript/jstest/functional/ExpressionTest.java)
         * Запускать c аргументом `hard` или `easy`;
  * *Mini* (для тестирования)
     * Не поддерживаются бинарные операции
-    * Код находится в файле [functionalMiniExpression.js](javascript/functionalMiniExpression.js).
-    * [Исходный код тестов](javascript/jstest/functional/FunctionalMiniTest.java)
+    * Код находится в файле [functionalMiniExpression.js](javascript/MiniExpression.js).
+    * [Исходный код тестов](javascript/jstest/functional/MiniTest.java)
         * Запускать c аргументом `hard` или `easy`;
  * *Variables* (32, 33). Дополнительно реализовать поддержку:
     * переменных: `y`, `z`;
-    * [Исходный код тестов](javascript/jstest/functional/FunctionalVariablesTest.java)
+    * [Исходный код тестов](javascript/jstest/functional/FunctionalTest.java)
  * *OneTwo* (34, 35). Дополнительно реализовать поддержку:
     * переменных: `y`, `z`;
     * констант:
         * `one` – 1;
         * `two` – 2;
-    * [Исходный код тестов](javascript/jstest/functional/FunctionalOneTwoTest.java)
+    * [Исходный код тестов](javascript/jstest/functional/FunctionalTest.java)
  * *OneMinMax* (36, 37). Дополнительно реализовать поддержку:
     * переменных: `y`, `z`;
     * констант:
@@ -304,7 +351,7 @@
     * операций:
         * `min5` – минимальный из пяти аргументов, `3 1 4 0 2 min5` равно 0;
         * `max3` – максимальный из трех аргументов, `3 1 4 max3` равно 4.
-    * [Исходный код тестов](javascript/jstest/functional/FunctionalOneMinMaxTest.java)
+    * [Исходный код тестов](javascript/jstest/functional/FunctionalTest.java)
  * *OneFP* (38, 39). Дополнительно реализовать поддержку:
     * переменных: `y`, `z`;
     * констант:
@@ -314,7 +361,7 @@
         * `*+` (`madd`) – тернарный оператор произведение-сумма, `2 3 4 *+` равно 10;
         * `_` (`floor`) – округление вниз `2.7 _` равно 2;
         * `^` (`ceil`) – округление вверх `2.7 ^` равно 3.
-    * [Исходный код тестов](javascript/jstest/functional/FunctionalOneFPTest.java)
+    * [Исходный код тестов](javascript/jstest/functional/FunctionalTest.java)
 
 Запуск тестов
  * Для запуска тестов используется [GraalJS](https://github.com/graalvm/graaljs)

@@ -17,6 +17,15 @@
     * Код должен находиться в файле `prolog-solutions/tree-map.pl`.
     * [Исходный код тестов](prolog/prtest/tree/PrologTreeTest.java)
         * Запускать c аргументом `easy` или `hard`
+ * *Contains* (32-33)
+    * Добавьте правила:
+        * `map_containsKey(Map, Key)`, проверяющее наличие ключа в дереве;
+        * `map_containsValue(Map, Value)`, проверяющее наличие значения в дереве.
+    * [Исходный код тестов](prolog/prtest/tree/PrologTreeContainsTest.java)
+ * *KeysValues* (34-35)
+    * Добавьте правила:
+        * `map_Keys(Map, Keys)`, возвращающее ключи в порядке возрастания;
+        * `map_Values(Map, Values)`, возвращающее значения в порядке возрастания ключей.
 
 
 ## Домашнее задание 12. Простые числа на Prolog

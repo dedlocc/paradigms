@@ -26,6 +26,7 @@ public class PrologPrimesTest extends PrologTest {
     private static final Rule PRIME = new Rule("prime", 1);
     private static final Rule COMPOSITE = new Rule("composite", 1);
     private static final Rule PRIME_DIVISORS = new Rule("prime_divisors", 2);
+    private static final int MAX_Q = 100_000;
 
     public static double maxRatio = 0;
     public static String SUFFIX = ".pl";
@@ -101,14 +102,17 @@ public class PrologPrimesTest extends PrologTest {
     }
 
     private void checkComposites() {
-        for (int i = 0; i < primes.length; i++) {
+        for (int i = 0; i < Math.min(primes.length, MAX_Q); i++) {
             checkPrime(randomN());
         }
     }
 
     private void checkPrimes() {
-        for (final int prime : primes) {
-            checkPrime(prime);
+        for (int i = 0; i < primes.length; i++) {
+            checkPrime(primes[i]);
+            if (i > MAX_Q) {
+                i += 5;
+            }
         }
     }
 

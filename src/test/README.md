@@ -2,6 +2,14 @@
 
 [Условия домашних заданий](http://www.kgeorgiy.info/courses/paradigms/homeworks.html)
 
+## Домашнее задание 14. Разбор выражений на Prolog
+
+Модификации
+ * *Base*
+    * Код должен находиться в файле `prolog-solutions/expression.pl`.
+    * [Исходный код тестов](prolog/prtest/parsing/ParserTest.java)
+        * Запускать c указанием модификации и сложности (`easy` или `hard`).
+
 ## Домашнее задание 13. Дерево поиска на Prolog
 
 Модификации
@@ -18,6 +26,11 @@
     * Добавьте правила:
         * `map_Keys(Map, Keys)`, возвращающее ключи в порядке возрастания;
         * `map_Values(Map, Values)`, возвращающее значения в порядке возрастания ключей.
+ * *Last* (36-37)
+    * Добавьте правила:
+        * `map_getLast(Map, (Key, Value))`, возвращающее максимальную пару;
+        * `map_removeLast(Map, Result)`, удаляющее максимальную пару.
+    * [Исходный код тестов](prolog/prtest/tree/PrologTreeLastTest.java)
 
 
 ## Домашнее задание 12. Простые числа на Prolog
@@ -71,6 +84,11 @@
  * [Задача о расстановке ферзей](prolog/examples/2_1_queens.pl)
  * [Задача Эйнштейна](prolog/examples/2_2_einstein.pl)
  * [Арифметические выражения](prolog/examples/2_3_expressions.pl)
+
+Лекция 3. Преобразование в строку и разбор
+ * [Преобразование через термы](prolog/examples/3_1_terms.pl)
+ * [Преобразование через списки](prolog/examples/3_2_chars.pl)
+ * [Грамматики](prolog/examples/3_3_grammar.pl)
 
 
 ## Домашнее задание 11. Комбинаторные парсеры

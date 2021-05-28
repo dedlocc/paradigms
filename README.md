@@ -31,6 +31,13 @@
         * `map_getLast(Map, (Key, Value))`, возвращающее максимальную пару;
         * `map_removeLast(Map, Result)`, удаляющее максимальную пару.
     * [Исходный код тестов](prolog/prtest/tree/PrologTreeLastTest.java)
+ * *HeadTail* (38-39(
+    * Добавьте правила:
+        * `map_headMapSize(Map, ToKey, Size)`, 
+            возвращающее число пар меньших `ToKey`;
+        * `map_tailMapSize(Map, FromKey, Size)`, 
+            возвращающее число пар больших или равных `FromKey`,
+    * [Исходный код тестов](prolog/prtest/tree/PrologTreeHeadTailTest.java)
 
 
 ## Домашнее задание 12. Простые числа на Prolog

@@ -6,7 +6,7 @@ import jstest.expression.Selector;
 
 import java.util.function.BiConsumer;
 
-import static jstest.expression.FullOperations.ARITH;
+import static jstest.expression.Operations.*;
 
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)
@@ -14,6 +14,7 @@ import static jstest.expression.FullOperations.ARITH;
 public class ParserTest {
     private static final Selector SELECTOR = ParserTester.SELECTOR.copy()
             .add("Base", ARITH)
+            .add("SinCos",                 ARITH, SIN,         COS)
             ;
 
     public static void main(final String... args) {

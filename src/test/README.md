@@ -5,10 +5,14 @@
 ## Домашнее задание 14. Разбор выражений на Prolog
 
 Модификации
- * *Base*
+ * *Base* (32-33)
     * Код должен находиться в файле `prolog-solutions/expression.pl`.
     * [Исходный код тестов](prolog/prtest/parsing/ParserTest.java)
         * Запускать c указанием модификации и сложности (`easy` или `hard`).
+ * *SinCos*. (34-35) Дополнительно реализовать поддержку:
+    * унарных операций:
+        * `op_sin` (`sin`) – синус, `(4846147 sin)` примерно равно 1;
+        * `op_cos` (`cos`) – косинус, `(5419351 cos)` примерно равно 1.
 
 ## Домашнее задание 13. Дерево поиска на Prolog
 
@@ -31,6 +35,13 @@
         * `map_getLast(Map, (Key, Value))`, возвращающее максимальную пару;
         * `map_removeLast(Map, Result)`, удаляющее максимальную пару.
     * [Исходный код тестов](prolog/prtest/tree/PrologTreeLastTest.java)
+ * *HeadTail* (38-39(
+    * Добавьте правила:
+        * `map_headMapSize(Map, ToKey, Size)`, 
+            возвращающее число пар меньших `ToKey`;
+        * `map_tailMapSize(Map, FromKey, Size)`, 
+            возвращающее число пар больших или равных `FromKey`,
+    * [Исходный код тестов](prolog/prtest/tree/PrologTreeHeadTailTest.java)
 
 
 ## Домашнее задание 12. Простые числа на Prolog

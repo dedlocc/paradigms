@@ -14,6 +14,7 @@ import static jstest.expression.Operations.ARITH;
 public class ParserTest {
     private static final Selector SELECTOR = ParserTester.SELECTOR.copy()
             .add("Base", ARITH)
+            .add("SinCos",                 ARITH, SIN,         COS)
             ;
 
     public static void main(final String... args) {

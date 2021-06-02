@@ -6,7 +6,7 @@ import jstest.expression.Selector;
 
 import java.util.function.BiConsumer;
 
-import static jstest.expression.Operations.ARITH;
+import static jstest.expression.Operations.*;
 
 /**
  * @author Georgiy Korneev (kgeorgiy@kgeorgiy.info)

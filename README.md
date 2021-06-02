@@ -5,7 +5,7 @@
 ## Домашнее задание 14. Разбор выражений на Prolog
 
 Модификации
- * *Base*
+ * *Base* (32-33)
     * Код должен находиться в файле `prolog-solutions/expression.pl`.
     * [Исходный код тестов](prolog/prtest/parsing/ParserTest.java)
         * Запускать c указанием модификации и сложности (`easy` или `hard`).

@@ -1,5 +1,3 @@
-% 498194829173981
-
 init(M) :-
     B is floor(sqrt(M)),
     exclude(2, 4, M),
@@ -44,14 +42,14 @@ product(R, [H1, H2 | T]) :-
     prime_divisors(R1, [H2 | T]),
     R is R1 * H1.
 
-intersect([], _, []) :- !.
-intersect(_, [], []) :- !.
-intersect([H | T1], [H | T2], [H | TR]) :- intersect(T1, T2, TR).
-intersect([H1 | T1], [H2 | T2], R) :- H1 < H2, intersect(T1, [H2 | T2], R).
-intersect([H1 | T1], [H2 | T2], R) :- H1 > H2, intersect([H1 | T1], T2, R).
+intersection([], _, []) :- !.
+intersection(_, [], []) :- !.
+intersection([H | T1], [H | T2], [H | TR]) :- intersection(T1, T2, TR).
+intersection([H1 | T1], [H2 | T2], R) :- H1 < H2, intersection(T1, [H2 | T2], R).
+intersection([H1 | T1], [H2 | T2], R) :- H1 > H2, intersection([H1 | T1], T2, R).
 
 gcd(A, B, GCD) :-
     prime_divisors(A, PA),
     prime_divisors(B, PB),
-    intersect(PA, PB, I),
+    intersection(PA, PB, I),
     prime_divisors(GCD, I).

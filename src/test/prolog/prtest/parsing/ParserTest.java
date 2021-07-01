@@ -27,6 +27,7 @@ public class ParserTest {
             .add("Base", ARITH)
             .add("SinCos",                 ARITH, SIN,         COS)
             .add("VarSinhCosh", VARIABLES, ARITH, SINH,        COSH)
+            .add("VarBoolean",  VARIABLES, ARITH, INFIX_AND, INFIX_OR,INFIX_XOR)
             ;
 
     public static void main(final String... args) {

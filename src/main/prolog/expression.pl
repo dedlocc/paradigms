@@ -49,13 +49,15 @@ number_p(['-' | T]) --> ['-'], digits_p(T).
 
 operator_p(Op) --> { atom_chars(Op, C) }, C.
 
-op_p(op_add) --> operator_p('+').
-op_p(op_subtract) --> operator_p('-').
-op_p(op_multiply) --> operator_p('*').
-op_p(op_divide) --> operator_p('/').
-op_p(op_sinh) --> operator_p('sinh').
-op_p(op_cosh) --> operator_p('cosh').
-op_p(op_negate) --> operator_p('negate').
+op_p(op_add, '+').
+op_p(op_subtract, '-').
+op_p(op_multiply, '*').
+op_p(op_divide, '/').
+op_p(op_sinh, 'sinh').
+op_p(op_cosh, 'cosh').
+op_p(op_negate, 'negate').
+
+op_p(Op) --> { op_p(Op, S) }, operator_p(S).
 
 skip_ws([], []).
 skip_ws([' ' | T], RT) :- !, skip_ws(T, RT).
